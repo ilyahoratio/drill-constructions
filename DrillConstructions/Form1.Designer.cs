@@ -1,4 +1,6 @@
-﻿namespace DrillConstructions
+﻿using System;
+
+namespace DrillConstructions
 {
     partial class Form1
     {
@@ -43,12 +45,27 @@
             this.LabelMeaning = new System.Windows.Forms.Label();
             this.LableConstruction = new System.Windows.Forms.Label();
             this.TabBrowseCards = new System.Windows.Forms.TabPage();
-            this.TabSettings = new System.Windows.Forms.TabPage();
-            this.TxtSearch = new System.Windows.Forms.TextBox();
+            this.DataGridBrowseCards = new System.Windows.Forms.DataGridView();
             this.BtnSearch = new System.Windows.Forms.Button();
+            this.TxtSearch = new System.Windows.Forms.TextBox();
+            this.TabSettings = new System.Windows.Forms.TabPage();
+            this.PanelSelectStorage = new System.Windows.Forms.Panel();
+            this.LabelStorageColons = new System.Windows.Forms.Label();
+            this.LabelCurrentStorage = new System.Windows.Forms.Label();
+            this.ComboBoxAvailableStorages = new System.Windows.Forms.ComboBox();
+            this.BtnDeleteStorage = new System.Windows.Forms.Button();
+            this.BtnSelectCurrentStorage = new System.Windows.Forms.Button();
+            this.PanelCreateStorage = new System.Windows.Forms.Panel();
+            this.LabelNewStorageName = new System.Windows.Forms.Label();
+            this.TxtNewTableName = new System.Windows.Forms.TextBox();
+            this.BtnCreateTable = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
             this.TabCardsStorage.SuspendLayout();
             this.TabBrowseCards.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).BeginInit();
+            this.TabSettings.SuspendLayout();
+            this.PanelSelectStorage.SuspendLayout();
+            this.PanelCreateStorage.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -130,21 +147,21 @@
             this.ComboBoxType.Location = new System.Drawing.Point(202, 199);
             this.ComboBoxType.Name = "ComboBoxType";
             this.ComboBoxType.Size = new System.Drawing.Size(260, 35);
-            this.ComboBoxType.TabIndex = 2;
+            this.ComboBoxType.TabIndex = 4;
             // 
             // TxtExample
             // 
             this.TxtExample.Location = new System.Drawing.Point(202, 155);
             this.TxtExample.Name = "TxtExample";
             this.TxtExample.Size = new System.Drawing.Size(260, 35);
-            this.TxtExample.TabIndex = 1;
+            this.TxtExample.TabIndex = 3;
             // 
             // TxtMeaning
             // 
             this.TxtMeaning.Location = new System.Drawing.Point(202, 111);
             this.TxtMeaning.Name = "TxtMeaning";
             this.TxtMeaning.Size = new System.Drawing.Size(260, 35);
-            this.TxtMeaning.TabIndex = 1;
+            this.TxtMeaning.TabIndex = 2;
             // 
             // TxtConstruction
             // 
@@ -191,6 +208,7 @@
             // 
             // TabBrowseCards
             // 
+            this.TabBrowseCards.Controls.Add(this.DataGridBrowseCards);
             this.TabBrowseCards.Controls.Add(this.BtnSearch);
             this.TabBrowseCards.Controls.Add(this.TxtSearch);
             this.TabBrowseCards.Location = new System.Drawing.Point(4, 46);
@@ -201,22 +219,15 @@
             this.TabBrowseCards.Text = "Browse Cards";
             this.TabBrowseCards.UseVisualStyleBackColor = true;
             // 
-            // TabSettings
+            // DataGridBrowseCards
             // 
-            this.TabSettings.Location = new System.Drawing.Point(4, 46);
-            this.TabSettings.Name = "TabSettings";
-            this.TabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.TabSettings.Size = new System.Drawing.Size(1106, 574);
-            this.TabSettings.TabIndex = 4;
-            this.TabSettings.Text = "Settings";
-            this.TabSettings.UseVisualStyleBackColor = true;
-            // 
-            // TxtSearch
-            // 
-            this.TxtSearch.Location = new System.Drawing.Point(345, 58);
-            this.TxtSearch.Name = "TxtSearch";
-            this.TxtSearch.Size = new System.Drawing.Size(416, 35);
-            this.TxtSearch.TabIndex = 1;
+            this.DataGridBrowseCards.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridBrowseCards.Location = new System.Drawing.Point(27, 327);
+            this.DataGridBrowseCards.Name = "DataGridBrowseCards";
+            this.DataGridBrowseCards.RowHeadersWidth = 62;
+            this.DataGridBrowseCards.RowTemplate.Height = 28;
+            this.DataGridBrowseCards.Size = new System.Drawing.Size(1053, 222);
+            this.DataGridBrowseCards.TabIndex = 3;
             // 
             // BtnSearch
             // 
@@ -226,6 +237,127 @@
             this.BtnSearch.TabIndex = 2;
             this.BtnSearch.Text = "Search";
             this.BtnSearch.UseVisualStyleBackColor = true;
+            // 
+            // TxtSearch
+            // 
+            this.TxtSearch.Location = new System.Drawing.Point(345, 58);
+            this.TxtSearch.Name = "TxtSearch";
+            this.TxtSearch.Size = new System.Drawing.Size(416, 35);
+            this.TxtSearch.TabIndex = 1;
+            // 
+            // TabSettings
+            // 
+            this.TabSettings.Controls.Add(this.PanelSelectStorage);
+            this.TabSettings.Controls.Add(this.PanelCreateStorage);
+            this.TabSettings.Location = new System.Drawing.Point(4, 46);
+            this.TabSettings.Name = "TabSettings";
+            this.TabSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.TabSettings.Size = new System.Drawing.Size(1106, 574);
+            this.TabSettings.TabIndex = 4;
+            this.TabSettings.Text = "Settings";
+            this.TabSettings.UseVisualStyleBackColor = true;
+            // 
+            // PanelSelectStorage
+            // 
+            this.PanelSelectStorage.BackColor = System.Drawing.Color.MintCream;
+            this.PanelSelectStorage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSelectStorage.Controls.Add(this.LabelStorageColons);
+            this.PanelSelectStorage.Controls.Add(this.LabelCurrentStorage);
+            this.PanelSelectStorage.Controls.Add(this.ComboBoxAvailableStorages);
+            this.PanelSelectStorage.Controls.Add(this.BtnDeleteStorage);
+            this.PanelSelectStorage.Controls.Add(this.BtnSelectCurrentStorage);
+            this.PanelSelectStorage.Location = new System.Drawing.Point(24, 37);
+            this.PanelSelectStorage.Name = "PanelSelectStorage";
+            this.PanelSelectStorage.Size = new System.Drawing.Size(1058, 136);
+            this.PanelSelectStorage.TabIndex = 7;
+            // 
+            // LabelStorageColons
+            // 
+            this.LabelStorageColons.AutoSize = true;
+            this.LabelStorageColons.Font = new System.Drawing.Font("Noto Sans", 10F, System.Drawing.FontStyle.Bold);
+            this.LabelStorageColons.Location = new System.Drawing.Point(24, 27);
+            this.LabelStorageColons.Name = "LabelStorageColons";
+            this.LabelStorageColons.Size = new System.Drawing.Size(179, 27);
+            this.LabelStorageColons.TabIndex = 2;
+            this.LabelStorageColons.Text = "Current Storage:";
+            // 
+            // LabelCurrentStorage
+            // 
+            this.LabelCurrentStorage.AutoSize = true;
+            this.LabelCurrentStorage.Location = new System.Drawing.Point(203, 27);
+            this.LabelCurrentStorage.Name = "LabelCurrentStorage";
+            this.LabelCurrentStorage.Size = new System.Drawing.Size(141, 27);
+            this.LabelCurrentStorage.TabIndex = 5;
+            this.LabelCurrentStorage.Text = "storage name";
+            // 
+            // ComboBoxAvailableStorages
+            // 
+            this.ComboBoxAvailableStorages.FormattingEnabled = true;
+            this.ComboBoxAvailableStorages.Location = new System.Drawing.Point(555, 23);
+            this.ComboBoxAvailableStorages.Name = "ComboBoxAvailableStorages";
+            this.ComboBoxAvailableStorages.Size = new System.Drawing.Size(310, 35);
+            this.ComboBoxAvailableStorages.TabIndex = 1;
+            // 
+            // BtnDeleteStorage
+            // 
+            this.BtnDeleteStorage.BackColor = System.Drawing.Color.Crimson;
+            this.BtnDeleteStorage.ForeColor = System.Drawing.Color.White;
+            this.BtnDeleteStorage.Location = new System.Drawing.Point(882, 78);
+            this.BtnDeleteStorage.Name = "BtnDeleteStorage";
+            this.BtnDeleteStorage.Size = new System.Drawing.Size(160, 40);
+            this.BtnDeleteStorage.TabIndex = 3;
+            this.BtnDeleteStorage.Text = "Delete Storage";
+            this.BtnDeleteStorage.UseVisualStyleBackColor = false;
+            this.BtnDeleteStorage.Click += new System.EventHandler(this.BtnDeletetStorage_Click);
+            // 
+            // BtnSelectCurrentStorage
+            // 
+            this.BtnSelectCurrentStorage.Location = new System.Drawing.Point(882, 20);
+            this.BtnSelectCurrentStorage.Name = "BtnSelectCurrentStorage";
+            this.BtnSelectCurrentStorage.Size = new System.Drawing.Size(160, 40);
+            this.BtnSelectCurrentStorage.TabIndex = 2;
+            this.BtnSelectCurrentStorage.Text = "Select Storage";
+            this.BtnSelectCurrentStorage.UseVisualStyleBackColor = true;
+            this.BtnSelectCurrentStorage.Click += new System.EventHandler(this.BtnSelectCurrentStorage_Click);
+            // 
+            // PanelCreateStorage
+            // 
+            this.PanelCreateStorage.BackColor = System.Drawing.Color.Honeydew;
+            this.PanelCreateStorage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelCreateStorage.Controls.Add(this.LabelNewStorageName);
+            this.PanelCreateStorage.Controls.Add(this.TxtNewTableName);
+            this.PanelCreateStorage.Controls.Add(this.BtnCreateTable);
+            this.PanelCreateStorage.Location = new System.Drawing.Point(24, 209);
+            this.PanelCreateStorage.Name = "PanelCreateStorage";
+            this.PanelCreateStorage.Size = new System.Drawing.Size(369, 198);
+            this.PanelCreateStorage.TabIndex = 8;
+            // 
+            // LabelNewStorageName
+            // 
+            this.LabelNewStorageName.AutoSize = true;
+            this.LabelNewStorageName.Font = new System.Drawing.Font("Noto Sans", 10F, System.Drawing.FontStyle.Bold);
+            this.LabelNewStorageName.Location = new System.Drawing.Point(24, 30);
+            this.LabelNewStorageName.Name = "LabelNewStorageName";
+            this.LabelNewStorageName.Size = new System.Drawing.Size(211, 27);
+            this.LabelNewStorageName.TabIndex = 2;
+            this.LabelNewStorageName.Text = "New Storage Name:";
+            // 
+            // TxtNewTableName
+            // 
+            this.TxtNewTableName.Location = new System.Drawing.Point(24, 74);
+            this.TxtNewTableName.Name = "TxtNewTableName";
+            this.TxtNewTableName.Size = new System.Drawing.Size(304, 35);
+            this.TxtNewTableName.TabIndex = 4;
+            // 
+            // BtnCreateTable
+            // 
+            this.BtnCreateTable.Location = new System.Drawing.Point(24, 126);
+            this.BtnCreateTable.Name = "BtnCreateTable";
+            this.BtnCreateTable.Size = new System.Drawing.Size(175, 40);
+            this.BtnCreateTable.TabIndex = 5;
+            this.BtnCreateTable.Text = "Create";
+            this.BtnCreateTable.UseVisualStyleBackColor = true;
+            this.BtnCreateTable.Click += new System.EventHandler(this.BtnCreateTable_Click);
             // 
             // Form1
             // 
@@ -240,6 +372,12 @@
             this.TabCardsStorage.PerformLayout();
             this.TabBrowseCards.ResumeLayout(false);
             this.TabBrowseCards.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).EndInit();
+            this.TabSettings.ResumeLayout(false);
+            this.PanelSelectStorage.ResumeLayout(false);
+            this.PanelSelectStorage.PerformLayout();
+            this.PanelCreateStorage.ResumeLayout(false);
+            this.PanelCreateStorage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -264,6 +402,17 @@
         private System.Windows.Forms.TextBox TxtConstruction;
         private System.Windows.Forms.Button BtnSearch;
         private System.Windows.Forms.TextBox TxtSearch;
+        private System.Windows.Forms.DataGridView DataGridBrowseCards;
+        private System.Windows.Forms.TextBox TxtNewTableName;
+        private System.Windows.Forms.Button BtnCreateTable;
+        private System.Windows.Forms.Label LabelStorageColons;
+        private System.Windows.Forms.Button BtnSelectCurrentStorage;
+        private System.Windows.Forms.Label LabelCurrentStorage;
+        private System.Windows.Forms.ComboBox ComboBoxAvailableStorages;
+        private System.Windows.Forms.Panel PanelSelectStorage;
+        private System.Windows.Forms.Panel PanelCreateStorage;
+        private System.Windows.Forms.Label LabelNewStorageName;
+        private System.Windows.Forms.Button BtnDeleteStorage;
     }
 }
 
