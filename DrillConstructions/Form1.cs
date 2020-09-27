@@ -29,6 +29,7 @@ namespace DrillConstructions
             LoadData(activeConstructionsStorage);
             GetAvailableStorages();
             LabelCurrentStorage.Text = activeConstructionsStorage;
+            LabelAddingIntoStorageName.Text = activeConstructionsStorage;
         }
 
         private void SetDBConnection()
@@ -77,6 +78,7 @@ namespace DrillConstructions
                 "'Type'  TEXT NOT NULL," +
                 "PRIMARY KEY('ID' AUTOINCREMENT));";
                 ExecuteQuery(createNewTable);
+                sqlConnection.Close();
                 TxtNewTableName.Clear();
                 GetAvailableStorages();
                 MessageBox.Show($"New Storage '{tableName}' has been created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -98,6 +100,7 @@ namespace DrillConstructions
                 GetAvailableStorages();
                 LoadData(activeConstructionsStorage);
                 LabelCurrentStorage.Text = activeConstructionsStorage;
+                LabelAddingIntoStorageName.Text = activeConstructionsStorage;
                 MessageBox.Show($"Current Storage has been switched to '{ComboBoxAvailableStorages.Text}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -117,6 +120,7 @@ namespace DrillConstructions
 
                 string deleteTable = "DROP TABLE " + tableName;
                 ExecuteQuery(deleteTable);
+                sqlConnection.Close();
                 ComboBoxAvailableStorages.ResetText();
                 GetAvailableStorages();
                 MessageBox.Show($"Storage '{tableName}' has been DELETED.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -128,13 +132,14 @@ namespace DrillConstructions
         {
             ComboBoxAvailableStorages.Items.Clear();
             listOfAvailableStorages.Clear();
+            ClearAllOnAddCardsTab();
 
             SetDBConnection();
             sqlConnection.Open();
             sqlCommand = sqlConnection.CreateCommand();
 
-            string commandText = "select tbl_Name from sqlite_master "+
-                "where type = 'table' AND name NOT LIKE 'sqlite_%'";
+            string commandText = "SELECT tbl_Name FROM sqlite_master "+
+                "WHERE type = 'table' AND name NOT LIKE 'sqlite_%'";
 
             sqlCommand.CommandText = commandText;
             SQLiteDataReader dataBaseReader = sqlCommand.ExecuteReader();
@@ -150,8 +155,145 @@ namespace DrillConstructions
             {
                 ComboBoxAvailableStorages.Items.Add(availableTable.TableName);
             }
-
+            sqlConnection.Close();
         }
 
+        private void BtnCreateCard_Click(object sender, EventArgs e)
+        {
+
+            SetDBConnection();
+            sqlConnection.Open();
+            sqlCommand = sqlConnection.CreateCommand();
+
+            KeyValuePair<Label, Control>[] textFields = { new KeyValuePair<Label, Control>(LabelConstruction, (Control)TxtConstruction),
+            new KeyValuePair<Label, Control>(LabelMeaning, (Control)TxtMeaning),
+            new KeyValuePair<Label, Control>(LabelExample, (Control)TxtExample),
+            new KeyValuePair<Label, Control>(LabelType, (Control)ComboBoxType)};
+
+            List<string> invalidTextFields = new List<string>();
+
+            bool emptyString = false;
+
+            foreach (var textField in textFields)
+            {
+                if (textField.Value.Text == "")
+                {
+                    if (IsConvertibleTo<TextBox>(textField.Value))
+                    {
+                        var convertedValue = (TextBox)textField.Value;
+                        convertedValue.Clear();
+                    }
+                    else if (IsConvertibleTo<ComboBox>(textField.Value))
+                    {
+                        var convertedValue = (ComboBox)textField.Value;
+                        convertedValue.ResetText();
+                    }
+
+                    textField.Key.ForeColor = Color.Red;
+                    LabelAddCardInformation.ForeColor = Color.Red;
+                    invalidTextFields.Add(textField.Key.Text);
+                    emptyString = true;
+                } 
+                else
+                {
+                    textField.Key.ForeColor = SystemColors.ControlText;
+                }
+
+                if (invalidTextFields.Count == 1)
+                {
+                    LabelAddCardInformation.Text = $"'{textField.Key.Text}' field cannot be empty!";
+                }
+                else
+                {
+                    string invalidFieldsToDisplay = "";
+
+                    foreach(var invalidTextField in invalidTextFields)
+                    {
+                        if (!(invalidTextFields.IndexOf(invalidTextField) == invalidTextFields.Count - 1))
+                            invalidFieldsToDisplay += $"{invalidTextField}, ";
+                        else
+                            invalidFieldsToDisplay += $"{invalidTextField}";
+                    }
+
+                    LabelAddCardInformation.Text = $"'{invalidFieldsToDisplay}' fields cannot be empty!";
+                }
+            }
+
+            if (!emptyString)
+            {
+                string createCard = "INSERT INTO " + activeConstructionsStorage +
+                    " (Construction, Meaning, Example, Type) " +
+                    "VALUES ('" + TxtConstruction.Text + "', '" + TxtMeaning.Text + "', '" + TxtExample.Text + "', '" + ComboBoxType.Text + "')";
+
+                sqlCommand.CommandText = createCard;
+                ExecuteQuery(createCard);
+                sqlConnection.Close();
+                LabelAddCardInformation.ForeColor = Color.ForestGreen;
+                LabelAddCardInformation.Text = $"'{TxtConstruction.Text}' card has been added in '{activeConstructionsStorage}'.";
+                ClearAddCardFields();
+                LoadData(activeConstructionsStorage);
+            }
+            else { }
+        }
+
+        private void ClearAddCardFields()
+        {
+            TxtConstruction.Clear();
+            TxtMeaning.Clear();
+            TxtExample.Clear();
+            ComboBoxType.ResetText();
+        }
+
+        private bool IsConvertibleTo<T>(object value)
+        {
+            try
+            {
+                T convertedValue = (T)Convert.ChangeType(value, typeof(T));
+                return true;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+        }
+
+        private void BtnClear_Click(object sender, EventArgs e)
+        {
+            ClearAllOnAddCardsTab();
+        }
+
+        private void ClearLabelAddCardInformation()
+        {
+            LabelAddCardInformation.Text = "";
+        }
+
+        private void MakeFontForAddCardLabelsBlack()
+        {
+            LabelConstruction.ForeColor = Color.Black;
+            LabelMeaning.ForeColor = Color.Black;
+            LabelExample.ForeColor = Color.Black;
+            LabelType.ForeColor = Color.Black;
+        }
+
+        private void ClearAllOnAddCardsTab()
+        {
+            MakeFontForAddCardLabelsBlack();
+            ClearAddCardFields();
+            ClearLabelAddCardInformation();
+        }
+
+        //TODO: to think of the better way to handle this
+        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ClearAllOnAddCardsTab();
+        }
     }
 }
