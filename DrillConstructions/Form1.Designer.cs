@@ -33,9 +33,12 @@ namespace DrillConstructions
             this.TabControl = new System.Windows.Forms.TabControl();
             this.TabDrillsGenerator = new System.Windows.Forms.TabPage();
             this.TabStudyCards = new System.Windows.Forms.TabPage();
-            this.TabCardsStorage = new System.Windows.Forms.TabPage();
+            this.TabAddCards = new System.Windows.Forms.TabPage();
+            this.LabelAddCardInformation = new System.Windows.Forms.Label();
+            this.LabelAddingIntoStorageName = new System.Windows.Forms.Label();
+            this.LabelAddingCardsInto = new System.Windows.Forms.Label();
             this.BtnClear = new System.Windows.Forms.Button();
-            this.BtnCreate = new System.Windows.Forms.Button();
+            this.BtnCreateCard = new System.Windows.Forms.Button();
             this.ComboBoxType = new System.Windows.Forms.ComboBox();
             this.TxtExample = new System.Windows.Forms.TextBox();
             this.TxtMeaning = new System.Windows.Forms.TextBox();
@@ -43,7 +46,7 @@ namespace DrillConstructions
             this.LabelType = new System.Windows.Forms.Label();
             this.LabelExample = new System.Windows.Forms.Label();
             this.LabelMeaning = new System.Windows.Forms.Label();
-            this.LableConstruction = new System.Windows.Forms.Label();
+            this.LabelConstruction = new System.Windows.Forms.Label();
             this.TabBrowseCards = new System.Windows.Forms.TabPage();
             this.DataGridBrowseCards = new System.Windows.Forms.DataGridView();
             this.BtnSearch = new System.Windows.Forms.Button();
@@ -60,7 +63,7 @@ namespace DrillConstructions
             this.TxtNewTableName = new System.Windows.Forms.TextBox();
             this.BtnCreateTable = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
-            this.TabCardsStorage.SuspendLayout();
+            this.TabAddCards.SuspendLayout();
             this.TabBrowseCards.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).BeginInit();
             this.TabSettings.SuspendLayout();
@@ -72,7 +75,7 @@ namespace DrillConstructions
             // 
             this.TabControl.Controls.Add(this.TabDrillsGenerator);
             this.TabControl.Controls.Add(this.TabStudyCards);
-            this.TabControl.Controls.Add(this.TabCardsStorage);
+            this.TabControl.Controls.Add(this.TabAddCards);
             this.TabControl.Controls.Add(this.TabBrowseCards);
             this.TabControl.Controls.Add(this.TabSettings);
             this.TabControl.Font = new System.Drawing.Font("Noto Sans", 10F);
@@ -82,6 +85,7 @@ namespace DrillConstructions
             this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(1114, 624);
             this.TabControl.TabIndex = 0;
+            this.TabControl.Click += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             // 
             // TabDrillsGenerator
             // 
@@ -103,69 +107,116 @@ namespace DrillConstructions
             this.TabStudyCards.Text = "Study Cards";
             this.TabStudyCards.UseVisualStyleBackColor = true;
             // 
-            // TabCardsStorage
+            // TabAddCards
             // 
-            this.TabCardsStorage.Controls.Add(this.BtnClear);
-            this.TabCardsStorage.Controls.Add(this.BtnCreate);
-            this.TabCardsStorage.Controls.Add(this.ComboBoxType);
-            this.TabCardsStorage.Controls.Add(this.TxtExample);
-            this.TabCardsStorage.Controls.Add(this.TxtMeaning);
-            this.TabCardsStorage.Controls.Add(this.TxtConstruction);
-            this.TabCardsStorage.Controls.Add(this.LabelType);
-            this.TabCardsStorage.Controls.Add(this.LabelExample);
-            this.TabCardsStorage.Controls.Add(this.LabelMeaning);
-            this.TabCardsStorage.Controls.Add(this.LableConstruction);
-            this.TabCardsStorage.Location = new System.Drawing.Point(4, 46);
-            this.TabCardsStorage.Name = "TabCardsStorage";
-            this.TabCardsStorage.Padding = new System.Windows.Forms.Padding(3);
-            this.TabCardsStorage.Size = new System.Drawing.Size(1106, 574);
-            this.TabCardsStorage.TabIndex = 1;
-            this.TabCardsStorage.Text = "Cards Storage";
-            this.TabCardsStorage.UseVisualStyleBackColor = true;
+            this.TabAddCards.Controls.Add(this.LabelAddCardInformation);
+            this.TabAddCards.Controls.Add(this.LabelAddingIntoStorageName);
+            this.TabAddCards.Controls.Add(this.LabelAddingCardsInto);
+            this.TabAddCards.Controls.Add(this.BtnClear);
+            this.TabAddCards.Controls.Add(this.BtnCreateCard);
+            this.TabAddCards.Controls.Add(this.ComboBoxType);
+            this.TabAddCards.Controls.Add(this.TxtExample);
+            this.TabAddCards.Controls.Add(this.TxtMeaning);
+            this.TabAddCards.Controls.Add(this.TxtConstruction);
+            this.TabAddCards.Controls.Add(this.LabelType);
+            this.TabAddCards.Controls.Add(this.LabelExample);
+            this.TabAddCards.Controls.Add(this.LabelMeaning);
+            this.TabAddCards.Controls.Add(this.LabelConstruction);
+            this.TabAddCards.Location = new System.Drawing.Point(4, 46);
+            this.TabAddCards.Name = "TabAddCards";
+            this.TabAddCards.Padding = new System.Windows.Forms.Padding(3);
+            this.TabAddCards.Size = new System.Drawing.Size(1106, 574);
+            this.TabAddCards.TabIndex = 1;
+            this.TabAddCards.Text = "Add Cards";
+            this.TabAddCards.UseVisualStyleBackColor = true;
+            // 
+            // LabelAddCardInformation
+            // 
+            this.LabelAddCardInformation.AutoSize = true;
+            this.LabelAddCardInformation.Font = new System.Drawing.Font("Noto Sans", 10F, System.Drawing.FontStyle.Bold);
+            this.LabelAddCardInformation.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.LabelAddCardInformation.Location = new System.Drawing.Point(192, 303);
+            this.LabelAddCardInformation.Name = "LabelAddCardInformation";
+            this.LabelAddCardInformation.Size = new System.Drawing.Size(17, 27);
+            this.LabelAddCardInformation.TabIndex = 8;
+            this.LabelAddCardInformation.Text = " ";
+            // 
+            // LabelAddingIntoStorageName
+            // 
+            this.LabelAddingIntoStorageName.AutoSize = true;
+            this.LabelAddingIntoStorageName.Location = new System.Drawing.Point(308, 28);
+            this.LabelAddingIntoStorageName.Name = "LabelAddingIntoStorageName";
+            this.LabelAddingIntoStorageName.Size = new System.Drawing.Size(141, 27);
+            this.LabelAddingIntoStorageName.TabIndex = 6;
+            this.LabelAddingIntoStorageName.Text = "storage name";
+            // 
+            // LabelAddingCardsInto
+            // 
+            this.LabelAddingCardsInto.AutoSize = true;
+            this.LabelAddingCardsInto.Font = new System.Drawing.Font("Noto Sans", 10F, System.Drawing.FontStyle.Bold);
+            this.LabelAddingCardsInto.Location = new System.Drawing.Point(23, 28);
+            this.LabelAddingCardsInto.Name = "LabelAddingCardsInto";
+            this.LabelAddingCardsInto.Size = new System.Drawing.Size(285, 27);
+            this.LabelAddingCardsInto.TabIndex = 5;
+            this.LabelAddingCardsInto.Text = "Adding Cards into Storage: ";
             // 
             // BtnClear
             // 
-            this.BtnClear.Location = new System.Drawing.Point(154, 322);
+            this.BtnClear.Location = new System.Drawing.Point(344, 412);
             this.BtnClear.Name = "BtnClear";
             this.BtnClear.Size = new System.Drawing.Size(105, 40);
-            this.BtnClear.TabIndex = 3;
+            this.BtnClear.TabIndex = 6;
             this.BtnClear.Text = "Clear";
             this.BtnClear.UseVisualStyleBackColor = true;
+            this.BtnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
-            // BtnCreate
+            // BtnCreateCard
             // 
-            this.BtnCreate.Location = new System.Drawing.Point(23, 322);
-            this.BtnCreate.Name = "BtnCreate";
-            this.BtnCreate.Size = new System.Drawing.Size(105, 40);
-            this.BtnCreate.TabIndex = 3;
-            this.BtnCreate.Text = "Create";
-            this.BtnCreate.UseVisualStyleBackColor = true;
+            this.BtnCreateCard.Location = new System.Drawing.Point(213, 412);
+            this.BtnCreateCard.Name = "BtnCreateCard";
+            this.BtnCreateCard.Size = new System.Drawing.Size(105, 40);
+            this.BtnCreateCard.TabIndex = 5;
+            this.BtnCreateCard.Text = "Create";
+            this.BtnCreateCard.UseVisualStyleBackColor = true;
+            this.BtnCreateCard.Click += new System.EventHandler(this.BtnCreateCard_Click);
             // 
             // ComboBoxType
             // 
             this.ComboBoxType.FormattingEnabled = true;
-            this.ComboBoxType.Location = new System.Drawing.Point(202, 199);
+            this.ComboBoxType.Items.AddRange(new object[] {
+            "Conjunction",
+            "Filler",
+            "Intense",
+            "Interjection",
+            "Moreover",
+            "Question",
+            "Regarding",
+            "Sarcasm",
+            "Sentence Start",
+            "Subjunctive",
+            "Time"});
+            this.ComboBoxType.Location = new System.Drawing.Point(197, 234);
             this.ComboBoxType.Name = "ComboBoxType";
             this.ComboBoxType.Size = new System.Drawing.Size(260, 35);
             this.ComboBoxType.TabIndex = 4;
             // 
             // TxtExample
             // 
-            this.TxtExample.Location = new System.Drawing.Point(202, 155);
+            this.TxtExample.Location = new System.Drawing.Point(197, 190);
             this.TxtExample.Name = "TxtExample";
             this.TxtExample.Size = new System.Drawing.Size(260, 35);
             this.TxtExample.TabIndex = 3;
             // 
             // TxtMeaning
             // 
-            this.TxtMeaning.Location = new System.Drawing.Point(202, 111);
+            this.TxtMeaning.Location = new System.Drawing.Point(197, 146);
             this.TxtMeaning.Name = "TxtMeaning";
             this.TxtMeaning.Size = new System.Drawing.Size(260, 35);
             this.TxtMeaning.TabIndex = 2;
             // 
             // TxtConstruction
             // 
-            this.TxtConstruction.Location = new System.Drawing.Point(202, 67);
+            this.TxtConstruction.Location = new System.Drawing.Point(197, 102);
             this.TxtConstruction.Name = "TxtConstruction";
             this.TxtConstruction.Size = new System.Drawing.Size(260, 35);
             this.TxtConstruction.TabIndex = 1;
@@ -173,7 +224,7 @@ namespace DrillConstructions
             // LabelType
             // 
             this.LabelType.AutoSize = true;
-            this.LabelType.Location = new System.Drawing.Point(126, 202);
+            this.LabelType.Location = new System.Drawing.Point(121, 237);
             this.LabelType.Name = "LabelType";
             this.LabelType.Size = new System.Drawing.Size(56, 27);
             this.LabelType.TabIndex = 0;
@@ -182,7 +233,7 @@ namespace DrillConstructions
             // LabelExample
             // 
             this.LabelExample.AutoSize = true;
-            this.LabelExample.Location = new System.Drawing.Point(90, 158);
+            this.LabelExample.Location = new System.Drawing.Point(85, 193);
             this.LabelExample.Name = "LabelExample";
             this.LabelExample.Size = new System.Drawing.Size(92, 27);
             this.LabelExample.TabIndex = 0;
@@ -191,20 +242,20 @@ namespace DrillConstructions
             // LabelMeaning
             // 
             this.LabelMeaning.AutoSize = true;
-            this.LabelMeaning.Location = new System.Drawing.Point(89, 114);
+            this.LabelMeaning.Location = new System.Drawing.Point(84, 149);
             this.LabelMeaning.Name = "LabelMeaning";
             this.LabelMeaning.Size = new System.Drawing.Size(93, 27);
             this.LabelMeaning.TabIndex = 0;
             this.LabelMeaning.Text = "Meaning";
             // 
-            // LableConstruction
+            // LabelConstruction
             // 
-            this.LableConstruction.AutoSize = true;
-            this.LableConstruction.Location = new System.Drawing.Point(50, 70);
-            this.LableConstruction.Name = "LableConstruction";
-            this.LableConstruction.Size = new System.Drawing.Size(132, 27);
-            this.LableConstruction.TabIndex = 0;
-            this.LableConstruction.Text = "Construction";
+            this.LabelConstruction.AutoSize = true;
+            this.LabelConstruction.Location = new System.Drawing.Point(45, 105);
+            this.LabelConstruction.Name = "LabelConstruction";
+            this.LabelConstruction.Size = new System.Drawing.Size(132, 27);
+            this.LabelConstruction.TabIndex = 0;
+            this.LabelConstruction.Text = "Construction";
             // 
             // TabBrowseCards
             // 
@@ -368,8 +419,8 @@ namespace DrillConstructions
             this.Name = "Form1";
             this.Text = "Form1";
             this.TabControl.ResumeLayout(false);
-            this.TabCardsStorage.ResumeLayout(false);
-            this.TabCardsStorage.PerformLayout();
+            this.TabAddCards.ResumeLayout(false);
+            this.TabAddCards.PerformLayout();
             this.TabBrowseCards.ResumeLayout(false);
             this.TabBrowseCards.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).EndInit();
@@ -387,15 +438,15 @@ namespace DrillConstructions
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabDrillsGenerator;
         private System.Windows.Forms.TabPage TabStudyCards;
-        private System.Windows.Forms.TabPage TabCardsStorage;
+        private System.Windows.Forms.TabPage TabAddCards;
         private System.Windows.Forms.TabPage TabBrowseCards;
         private System.Windows.Forms.TabPage TabSettings;
         private System.Windows.Forms.Label LabelType;
         private System.Windows.Forms.Label LabelExample;
         private System.Windows.Forms.Label LabelMeaning;
-        private System.Windows.Forms.Label LableConstruction;
+        private System.Windows.Forms.Label LabelConstruction;
         private System.Windows.Forms.Button BtnClear;
-        private System.Windows.Forms.Button BtnCreate;
+        private System.Windows.Forms.Button BtnCreateCard;
         private System.Windows.Forms.ComboBox ComboBoxType;
         private System.Windows.Forms.TextBox TxtExample;
         private System.Windows.Forms.TextBox TxtMeaning;
@@ -413,6 +464,9 @@ namespace DrillConstructions
         private System.Windows.Forms.Panel PanelCreateStorage;
         private System.Windows.Forms.Label LabelNewStorageName;
         private System.Windows.Forms.Button BtnDeleteStorage;
+        private System.Windows.Forms.Label LabelAddingCardsInto;
+        private System.Windows.Forms.Label LabelAddingIntoStorageName;
+        private System.Windows.Forms.Label LabelAddCardInformation;
     }
 }
 
