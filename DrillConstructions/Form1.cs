@@ -64,22 +64,64 @@ namespace DrillConstructions
         private void BtnCreateTable_Click(object sender, EventArgs e)
         {
             string tableName = TxtNewTableName.Text;
-            string createNewTable = "CREATE TABLE '"+ tableName + "' ('ID' INTEGER NOT NULL UNIQUE," +
-            "'Construction'  TEXT NOT NULL UNIQUE," +
-            "'Meaning'   TEXT NOT NULL," +
-            "'Example'   TEXT NOT NULL," +
-            "'Type'  TEXT NOT NULL," +
-            "PRIMARY KEY('ID' AUTOINCREMENT));";
-            ExecuteQuery(createNewTable);
-            GetAvailableStorages();
+
+            var confirmationPopUp = MessageBox.Show($"Are you sure you want to create a new Storage '{tableName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirmationPopUp == DialogResult.Yes)
+            {
+                // TODO: add validation for empty string before creating a table
+
+                string createNewTable = "CREATE TABLE '" + tableName + "' ('ID' INTEGER NOT NULL UNIQUE," +
+                "'Construction'  TEXT NOT NULL UNIQUE," +
+                "'Meaning'   TEXT NOT NULL," +
+                "'Example'   TEXT NOT NULL," +
+                "'Type'  TEXT NOT NULL," +
+                "PRIMARY KEY('ID' AUTOINCREMENT));";
+                ExecuteQuery(createNewTable);
+                TxtNewTableName.Clear();
+                GetAvailableStorages();
+                MessageBox.Show($"New Storage '{tableName}' has been created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                TxtNewTableName.Clear();
+                GetAvailableStorages();
+                MessageBox.Show($"Adding new Storage has been cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void BtnSelectCurrentStorage_Click(object sender, EventArgs e)
         {
-            activeConstructionsStorage = ComboBoxAvailableStorages.Text;
-            GetAvailableStorages();
-            LoadData(activeConstructionsStorage);
-            LabelCurrentStorage.Text = activeConstructionsStorage;
+            var confirmationPopUp = MessageBox.Show($"Are you sure you want to switch the current storage to '{ComboBoxAvailableStorages.Text}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirmationPopUp == DialogResult.Yes)
+            {
+                activeConstructionsStorage = ComboBoxAvailableStorages.Text;
+                GetAvailableStorages();
+                LoadData(activeConstructionsStorage);
+                LabelCurrentStorage.Text = activeConstructionsStorage;
+                MessageBox.Show($"Current Storage has been switched to '{ComboBoxAvailableStorages.Text}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                ComboBoxAvailableStorages.ResetText();
+            }
+        }
+
+        private void BtnDeletetStorage_Click(object sender, EventArgs e)
+        {
+            string tableName = ComboBoxAvailableStorages.Text;
+
+            var confirmationPopUp = MessageBox.Show($"Are you sure you want to DELETE '{tableName}' Storage?", "Think Twice", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            if (confirmationPopUp == DialogResult.Yes)
+            {
+                // TODO: add validation so that the current table is not deleted
+
+                string deleteTable = "DROP TABLE " + tableName;
+                ExecuteQuery(deleteTable);
+                ComboBoxAvailableStorages.ResetText();
+                GetAvailableStorages();
+                MessageBox.Show($"Storage '{tableName}' has been DELETED.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else { }
         }
 
         private void GetAvailableStorages()
