@@ -21,12 +21,14 @@ namespace DrillConstructions
         private DataSet DS = new DataSet();
         private SQLiteDataAdapter DB;
         private string activeConstructionsStorage = "LanguageConstructions";
+        private List<Storage> listOfAvailableStorages = new List<Storage>();
 
         public Form1()
         {
             InitializeComponent();
             LoadData(activeConstructionsStorage);
-            TxtCurrentStorage.Text = activeConstructionsStorage;
+            GetAvailableStorages();
+            LabelCurrentStorage.Text = activeConstructionsStorage;
         }
 
         private void SetDBConnection()
@@ -69,12 +71,45 @@ namespace DrillConstructions
             "'Type'  TEXT NOT NULL," +
             "PRIMARY KEY('ID' AUTOINCREMENT));";
             ExecuteQuery(createNewTable);
+            GetAvailableStorages();
         }
 
         private void BtnSelectCurrentStorage_Click(object sender, EventArgs e)
         {
-            activeConstructionsStorage = TxtSetCurrentStorage.Text;
+            activeConstructionsStorage = ComboBoxAvailableStorages.Text;
+            GetAvailableStorages();
             LoadData(activeConstructionsStorage);
+            LabelCurrentStorage.Text = activeConstructionsStorage;
         }
+
+        private void GetAvailableStorages()
+        {
+            ComboBoxAvailableStorages.Items.Clear();
+            listOfAvailableStorages.Clear();
+
+            SetDBConnection();
+            sqlConnection.Open();
+            sqlCommand = sqlConnection.CreateCommand();
+
+            string commandText = "select tbl_Name from sqlite_master "+
+                "where type = 'table' AND name NOT LIKE 'sqlite_%'";
+
+            sqlCommand.CommandText = commandText;
+            SQLiteDataReader dataBaseReader = sqlCommand.ExecuteReader();
+
+            string tableName; ;
+            while(dataBaseReader.Read())
+            {
+                tableName = (string)dataBaseReader["tbl_Name"];
+                listOfAvailableStorages.Add(new Storage { TableName = tableName });
+            }
+
+            foreach(var availableTable in listOfAvailableStorages)
+            {
+                ComboBoxAvailableStorages.Items.Add(availableTable.TableName);
+            }
+
+        }
+
     }
 }

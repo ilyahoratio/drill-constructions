@@ -47,17 +47,22 @@
             this.BtnSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
             this.TabSettings = new System.Windows.Forms.TabPage();
-            this.TxtCurrentStorage = new System.Windows.Forms.TextBox();
             this.BtnSelectCurrentStorage = new System.Windows.Forms.Button();
-            this.TxtSetCurrentStorage = new System.Windows.Forms.TextBox();
-            this.LabelCurrentStorage = new System.Windows.Forms.Label();
+            this.LabelStorageColons = new System.Windows.Forms.Label();
             this.TxtNewTableName = new System.Windows.Forms.TextBox();
             this.BtnCreateTable = new System.Windows.Forms.Button();
+            this.LabelCurrentStorage = new System.Windows.Forms.Label();
+            this.ComboBoxAvailableStorages = new System.Windows.Forms.ComboBox();
+            this.PanelSelectStorage = new System.Windows.Forms.Panel();
+            this.PanelCreateStorage = new System.Windows.Forms.Panel();
+            this.LabelNewStorageName = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.TabCardsStorage.SuspendLayout();
             this.TabBrowseCards.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).BeginInit();
             this.TabSettings.SuspendLayout();
+            this.PanelSelectStorage.SuspendLayout();
+            this.PanelCreateStorage.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -239,12 +244,8 @@
             // 
             // TabSettings
             // 
-            this.TabSettings.Controls.Add(this.TxtCurrentStorage);
-            this.TabSettings.Controls.Add(this.BtnSelectCurrentStorage);
-            this.TabSettings.Controls.Add(this.TxtSetCurrentStorage);
-            this.TabSettings.Controls.Add(this.LabelCurrentStorage);
-            this.TabSettings.Controls.Add(this.TxtNewTableName);
-            this.TabSettings.Controls.Add(this.BtnCreateTable);
+            this.TabSettings.Controls.Add(this.PanelSelectStorage);
+            this.TabSettings.Controls.Add(this.PanelCreateStorage);
             this.TabSettings.Location = new System.Drawing.Point(4, 46);
             this.TabSettings.Name = "TabSettings";
             this.TabSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -253,56 +254,92 @@
             this.TabSettings.Text = "Settings";
             this.TabSettings.UseVisualStyleBackColor = true;
             // 
-            // TxtCurrentStorage
-            // 
-            this.TxtCurrentStorage.Enabled = false;
-            this.TxtCurrentStorage.Location = new System.Drawing.Point(192, 23);
-            this.TxtCurrentStorage.Name = "TxtCurrentStorage";
-            this.TxtCurrentStorage.Size = new System.Drawing.Size(330, 35);
-            this.TxtCurrentStorage.TabIndex = 5;
-            // 
             // BtnSelectCurrentStorage
             // 
-            this.BtnSelectCurrentStorage.Location = new System.Drawing.Point(853, 15);
+            this.BtnSelectCurrentStorage.Location = new System.Drawing.Point(823, 47);
             this.BtnSelectCurrentStorage.Name = "BtnSelectCurrentStorage";
-            this.BtnSelectCurrentStorage.Size = new System.Drawing.Size(105, 40);
+            this.BtnSelectCurrentStorage.Size = new System.Drawing.Size(160, 40);
             this.BtnSelectCurrentStorage.TabIndex = 4;
-            this.BtnSelectCurrentStorage.Text = "Select";
+            this.BtnSelectCurrentStorage.Text = "Select Storage";
             this.BtnSelectCurrentStorage.UseVisualStyleBackColor = true;
             this.BtnSelectCurrentStorage.Click += new System.EventHandler(this.BtnSelectCurrentStorage_Click);
             // 
-            // TxtSetCurrentStorage
+            // LabelStorageColons
             // 
-            this.TxtSetCurrentStorage.Location = new System.Drawing.Point(664, 15);
-            this.TxtSetCurrentStorage.Name = "TxtSetCurrentStorage";
-            this.TxtSetCurrentStorage.Size = new System.Drawing.Size(168, 35);
-            this.TxtSetCurrentStorage.TabIndex = 3;
-            // 
-            // LabelCurrentStorage
-            // 
-            this.LabelCurrentStorage.AutoSize = true;
-            this.LabelCurrentStorage.Location = new System.Drawing.Point(26, 23);
-            this.LabelCurrentStorage.Name = "LabelCurrentStorage";
-            this.LabelCurrentStorage.Size = new System.Drawing.Size(160, 27);
-            this.LabelCurrentStorage.TabIndex = 2;
-            this.LabelCurrentStorage.Text = "Current Storage";
+            this.LabelStorageColons.AutoSize = true;
+            this.LabelStorageColons.Location = new System.Drawing.Point(73, 54);
+            this.LabelStorageColons.Name = "LabelStorageColons";
+            this.LabelStorageColons.Size = new System.Drawing.Size(165, 27);
+            this.LabelStorageColons.TabIndex = 2;
+            this.LabelStorageColons.Text = "Current Storage:";
             // 
             // TxtNewTableName
             // 
-            this.TxtNewTableName.Location = new System.Drawing.Point(125, 99);
+            this.TxtNewTableName.Location = new System.Drawing.Point(24, 74);
             this.TxtNewTableName.Name = "TxtNewTableName";
             this.TxtNewTableName.Size = new System.Drawing.Size(304, 35);
             this.TxtNewTableName.TabIndex = 1;
             // 
             // BtnCreateTable
             // 
-            this.BtnCreateTable.Location = new System.Drawing.Point(125, 159);
+            this.BtnCreateTable.Location = new System.Drawing.Point(24, 126);
             this.BtnCreateTable.Name = "BtnCreateTable";
             this.BtnCreateTable.Size = new System.Drawing.Size(175, 40);
             this.BtnCreateTable.TabIndex = 0;
-            this.BtnCreateTable.Text = "Create Storage";
+            this.BtnCreateTable.Text = "Create";
             this.BtnCreateTable.UseVisualStyleBackColor = true;
             this.BtnCreateTable.Click += new System.EventHandler(this.BtnCreateTable_Click);
+            // 
+            // LabelCurrentStorage
+            // 
+            this.LabelCurrentStorage.AutoSize = true;
+            this.LabelCurrentStorage.Location = new System.Drawing.Point(244, 54);
+            this.LabelCurrentStorage.Name = "LabelCurrentStorage";
+            this.LabelCurrentStorage.Size = new System.Drawing.Size(141, 27);
+            this.LabelCurrentStorage.TabIndex = 5;
+            this.LabelCurrentStorage.Text = "storage name";
+            // 
+            // ComboBoxAvailableStorages
+            // 
+            this.ComboBoxAvailableStorages.FormattingEnabled = true;
+            this.ComboBoxAvailableStorages.Location = new System.Drawing.Point(496, 50);
+            this.ComboBoxAvailableStorages.Name = "ComboBoxAvailableStorages";
+            this.ComboBoxAvailableStorages.Size = new System.Drawing.Size(310, 35);
+            this.ComboBoxAvailableStorages.TabIndex = 6;
+            // 
+            // PanelSelectStorage
+            // 
+            this.PanelSelectStorage.BackColor = System.Drawing.Color.MintCream;
+            this.PanelSelectStorage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSelectStorage.Controls.Add(this.LabelStorageColons);
+            this.PanelSelectStorage.Controls.Add(this.LabelCurrentStorage);
+            this.PanelSelectStorage.Controls.Add(this.ComboBoxAvailableStorages);
+            this.PanelSelectStorage.Controls.Add(this.BtnSelectCurrentStorage);
+            this.PanelSelectStorage.Location = new System.Drawing.Point(24, 37);
+            this.PanelSelectStorage.Name = "PanelSelectStorage";
+            this.PanelSelectStorage.Size = new System.Drawing.Size(1058, 136);
+            this.PanelSelectStorage.TabIndex = 7;
+            // 
+            // PanelCreateStorage
+            // 
+            this.PanelCreateStorage.BackColor = System.Drawing.Color.Honeydew;
+            this.PanelCreateStorage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelCreateStorage.Controls.Add(this.LabelNewStorageName);
+            this.PanelCreateStorage.Controls.Add(this.TxtNewTableName);
+            this.PanelCreateStorage.Controls.Add(this.BtnCreateTable);
+            this.PanelCreateStorage.Location = new System.Drawing.Point(24, 209);
+            this.PanelCreateStorage.Name = "PanelCreateStorage";
+            this.PanelCreateStorage.Size = new System.Drawing.Size(369, 198);
+            this.PanelCreateStorage.TabIndex = 8;
+            // 
+            // LabelNewStorageName
+            // 
+            this.LabelNewStorageName.AutoSize = true;
+            this.LabelNewStorageName.Location = new System.Drawing.Point(24, 30);
+            this.LabelNewStorageName.Name = "LabelNewStorageName";
+            this.LabelNewStorageName.Size = new System.Drawing.Size(197, 27);
+            this.LabelNewStorageName.TabIndex = 2;
+            this.LabelNewStorageName.Text = "New Storage Name:";
             // 
             // Form1
             // 
@@ -319,7 +356,10 @@
             this.TabBrowseCards.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).EndInit();
             this.TabSettings.ResumeLayout(false);
-            this.TabSettings.PerformLayout();
+            this.PanelSelectStorage.ResumeLayout(false);
+            this.PanelSelectStorage.PerformLayout();
+            this.PanelCreateStorage.ResumeLayout(false);
+            this.PanelCreateStorage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -347,10 +387,13 @@
         private System.Windows.Forms.DataGridView DataGridBrowseCards;
         private System.Windows.Forms.TextBox TxtNewTableName;
         private System.Windows.Forms.Button BtnCreateTable;
-        private System.Windows.Forms.TextBox TxtSetCurrentStorage;
-        private System.Windows.Forms.Label LabelCurrentStorage;
+        private System.Windows.Forms.Label LabelStorageColons;
         private System.Windows.Forms.Button BtnSelectCurrentStorage;
-        private System.Windows.Forms.TextBox TxtCurrentStorage;
+        private System.Windows.Forms.Label LabelCurrentStorage;
+        private System.Windows.Forms.ComboBox ComboBoxAvailableStorages;
+        private System.Windows.Forms.Panel PanelSelectStorage;
+        private System.Windows.Forms.Panel PanelCreateStorage;
+        private System.Windows.Forms.Label LabelNewStorageName;
     }
 }
 
