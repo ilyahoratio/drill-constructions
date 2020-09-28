@@ -48,7 +48,24 @@ namespace DrillConstructions
             this.LabelMeaning = new System.Windows.Forms.Label();
             this.LabelConstruction = new System.Windows.Forms.Label();
             this.TabBrowseCards = new System.Windows.Forms.TabPage();
+            this.LabelUpdateCardInformation = new System.Windows.Forms.Label();
+            this.BtnDeleteCard = new System.Windows.Forms.Button();
+            this.BtnUpdateCard = new System.Windows.Forms.Button();
+            this.BtnClearCardFieldsBrowseCards = new System.Windows.Forms.Button();
+            this.BtnSelectCard = new System.Windows.Forms.Button();
+            this.ComboBoxBrowserType = new System.Windows.Forms.ComboBox();
+            this.TxtBrowserExample = new System.Windows.Forms.TextBox();
+            this.TxtBrowserMeaning = new System.Windows.Forms.TextBox();
+            this.TxtBrowserConstruction = new System.Windows.Forms.TextBox();
+            this.TxtBrowserID = new System.Windows.Forms.TextBox();
+            this.LabelBrowserType = new System.Windows.Forms.Label();
+            this.LabelBrowserExample = new System.Windows.Forms.Label();
+            this.LabelBrowserMeaning = new System.Windows.Forms.Label();
+            this.LabelBrowserConstruction = new System.Windows.Forms.Label();
+            this.LabelBrowserID = new System.Windows.Forms.Label();
             this.DataGridBrowseCards = new System.Windows.Forms.DataGridView();
+            this.PanelSearchCards = new System.Windows.Forms.Panel();
+            this.ComboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.BtnSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
             this.TabSettings = new System.Windows.Forms.TabPage();
@@ -62,10 +79,12 @@ namespace DrillConstructions
             this.LabelNewStorageName = new System.Windows.Forms.Label();
             this.TxtNewTableName = new System.Windows.Forms.TextBox();
             this.BtnCreateTable = new System.Windows.Forms.Button();
+            this.LabelBrowserSearchResultsFor = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.TabAddCards.SuspendLayout();
             this.TabBrowseCards.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).BeginInit();
+            this.PanelSearchCards.SuspendLayout();
             this.TabSettings.SuspendLayout();
             this.PanelSelectStorage.SuspendLayout();
             this.PanelCreateStorage.SuspendLayout();
@@ -182,6 +201,7 @@ namespace DrillConstructions
             // 
             // ComboBoxType
             // 
+            this.ComboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxType.FormattingEnabled = true;
             this.ComboBoxType.Items.AddRange(new object[] {
             "Conjunction",
@@ -259,9 +279,23 @@ namespace DrillConstructions
             // 
             // TabBrowseCards
             // 
+            this.TabBrowseCards.Controls.Add(this.LabelUpdateCardInformation);
+            this.TabBrowseCards.Controls.Add(this.BtnDeleteCard);
+            this.TabBrowseCards.Controls.Add(this.BtnUpdateCard);
+            this.TabBrowseCards.Controls.Add(this.BtnClearCardFieldsBrowseCards);
+            this.TabBrowseCards.Controls.Add(this.BtnSelectCard);
+            this.TabBrowseCards.Controls.Add(this.ComboBoxBrowserType);
+            this.TabBrowseCards.Controls.Add(this.TxtBrowserExample);
+            this.TabBrowseCards.Controls.Add(this.TxtBrowserMeaning);
+            this.TabBrowseCards.Controls.Add(this.TxtBrowserConstruction);
+            this.TabBrowseCards.Controls.Add(this.TxtBrowserID);
+            this.TabBrowseCards.Controls.Add(this.LabelBrowserType);
+            this.TabBrowseCards.Controls.Add(this.LabelBrowserExample);
+            this.TabBrowseCards.Controls.Add(this.LabelBrowserMeaning);
+            this.TabBrowseCards.Controls.Add(this.LabelBrowserConstruction);
+            this.TabBrowseCards.Controls.Add(this.LabelBrowserID);
             this.TabBrowseCards.Controls.Add(this.DataGridBrowseCards);
-            this.TabBrowseCards.Controls.Add(this.BtnSearch);
-            this.TabBrowseCards.Controls.Add(this.TxtSearch);
+            this.TabBrowseCards.Controls.Add(this.PanelSearchCards);
             this.TabBrowseCards.Location = new System.Drawing.Point(4, 46);
             this.TabBrowseCards.Name = "TabBrowseCards";
             this.TabBrowseCards.Padding = new System.Windows.Forms.Padding(3);
@@ -270,30 +304,206 @@ namespace DrillConstructions
             this.TabBrowseCards.Text = "Browse Cards";
             this.TabBrowseCards.UseVisualStyleBackColor = true;
             // 
+            // LabelUpdateCardInformation
+            // 
+            this.LabelUpdateCardInformation.AutoSize = true;
+            this.LabelUpdateCardInformation.Font = new System.Drawing.Font("Noto Sans", 10F, System.Drawing.FontStyle.Bold);
+            this.LabelUpdateCardInformation.Location = new System.Drawing.Point(172, 241);
+            this.LabelUpdateCardInformation.Name = "LabelUpdateCardInformation";
+            this.LabelUpdateCardInformation.Size = new System.Drawing.Size(17, 27);
+            this.LabelUpdateCardInformation.TabIndex = 10;
+            this.LabelUpdateCardInformation.Text = " ";
+            // 
+            // BtnDeleteCard
+            // 
+            this.BtnDeleteCard.Location = new System.Drawing.Point(453, 301);
+            this.BtnDeleteCard.Name = "BtnDeleteCard";
+            this.BtnDeleteCard.Size = new System.Drawing.Size(105, 40);
+            this.BtnDeleteCard.TabIndex = 9;
+            this.BtnDeleteCard.Text = "Delete";
+            this.BtnDeleteCard.UseVisualStyleBackColor = true;
+            this.BtnDeleteCard.Click += new System.EventHandler(this.BtnDeleteCard_Click);
+            // 
+            // BtnUpdateCard
+            // 
+            this.BtnUpdateCard.Location = new System.Drawing.Point(324, 301);
+            this.BtnUpdateCard.Name = "BtnUpdateCard";
+            this.BtnUpdateCard.Size = new System.Drawing.Size(105, 40);
+            this.BtnUpdateCard.TabIndex = 9;
+            this.BtnUpdateCard.Text = "Update";
+            this.BtnUpdateCard.UseVisualStyleBackColor = true;
+            this.BtnUpdateCard.Click += new System.EventHandler(this.ButtonUpdateCard_Click);
+            // 
+            // BtnClearCardFieldsBrowseCards
+            // 
+            this.BtnClearCardFieldsBrowseCards.Location = new System.Drawing.Point(195, 301);
+            this.BtnClearCardFieldsBrowseCards.Name = "BtnClearCardFieldsBrowseCards";
+            this.BtnClearCardFieldsBrowseCards.Size = new System.Drawing.Size(105, 40);
+            this.BtnClearCardFieldsBrowseCards.TabIndex = 9;
+            this.BtnClearCardFieldsBrowseCards.Text = "Clear";
+            this.BtnClearCardFieldsBrowseCards.UseVisualStyleBackColor = true;
+            this.BtnClearCardFieldsBrowseCards.Click += new System.EventHandler(this.BtnClearCardFieldsBrowseCards_Click);
+            // 
+            // BtnSelectCard
+            // 
+            this.BtnSelectCard.Location = new System.Drawing.Point(66, 301);
+            this.BtnSelectCard.Name = "BtnSelectCard";
+            this.BtnSelectCard.Size = new System.Drawing.Size(105, 40);
+            this.BtnSelectCard.TabIndex = 9;
+            this.BtnSelectCard.Text = "Select";
+            this.BtnSelectCard.UseVisualStyleBackColor = true;
+            this.BtnSelectCard.Click += new System.EventHandler(this.BtnSelectCard_Click);
+            // 
+            // ComboBoxBrowserType
+            // 
+            this.ComboBoxBrowserType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBoxBrowserType.FormattingEnabled = true;
+            this.ComboBoxBrowserType.Items.AddRange(new object[] {
+            "Conjunction",
+            "Filler",
+            "Intense",
+            "Interjection",
+            "Moreover",
+            "Question",
+            "Regarding",
+            "Sarcasm",
+            "Sentence Start",
+            "Subjunctive",
+            "Time"});
+            this.ComboBoxBrowserType.Location = new System.Drawing.Point(177, 184);
+            this.ComboBoxBrowserType.Name = "ComboBoxBrowserType";
+            this.ComboBoxBrowserType.Size = new System.Drawing.Size(260, 35);
+            this.ComboBoxBrowserType.TabIndex = 8;
+            // 
+            // TxtBrowserExample
+            // 
+            this.TxtBrowserExample.Location = new System.Drawing.Point(177, 143);
+            this.TxtBrowserExample.Name = "TxtBrowserExample";
+            this.TxtBrowserExample.Size = new System.Drawing.Size(260, 35);
+            this.TxtBrowserExample.TabIndex = 7;
+            // 
+            // TxtBrowserMeaning
+            // 
+            this.TxtBrowserMeaning.Location = new System.Drawing.Point(177, 102);
+            this.TxtBrowserMeaning.Name = "TxtBrowserMeaning";
+            this.TxtBrowserMeaning.Size = new System.Drawing.Size(260, 35);
+            this.TxtBrowserMeaning.TabIndex = 7;
+            // 
+            // TxtBrowserConstruction
+            // 
+            this.TxtBrowserConstruction.Location = new System.Drawing.Point(177, 61);
+            this.TxtBrowserConstruction.Name = "TxtBrowserConstruction";
+            this.TxtBrowserConstruction.Size = new System.Drawing.Size(260, 35);
+            this.TxtBrowserConstruction.TabIndex = 7;
+            // 
+            // TxtBrowserID
+            // 
+            this.TxtBrowserID.Enabled = false;
+            this.TxtBrowserID.Location = new System.Drawing.Point(177, 20);
+            this.TxtBrowserID.Name = "TxtBrowserID";
+            this.TxtBrowserID.Size = new System.Drawing.Size(260, 35);
+            this.TxtBrowserID.TabIndex = 7;
+            // 
+            // LabelBrowserType
+            // 
+            this.LabelBrowserType.AutoSize = true;
+            this.LabelBrowserType.Location = new System.Drawing.Point(102, 188);
+            this.LabelBrowserType.Name = "LabelBrowserType";
+            this.LabelBrowserType.Size = new System.Drawing.Size(56, 27);
+            this.LabelBrowserType.TabIndex = 6;
+            this.LabelBrowserType.Text = "Type";
+            // 
+            // LabelBrowserExample
+            // 
+            this.LabelBrowserExample.AutoSize = true;
+            this.LabelBrowserExample.Location = new System.Drawing.Point(66, 147);
+            this.LabelBrowserExample.Name = "LabelBrowserExample";
+            this.LabelBrowserExample.Size = new System.Drawing.Size(92, 27);
+            this.LabelBrowserExample.TabIndex = 6;
+            this.LabelBrowserExample.Text = "Example";
+            // 
+            // LabelBrowserMeaning
+            // 
+            this.LabelBrowserMeaning.AutoSize = true;
+            this.LabelBrowserMeaning.Location = new System.Drawing.Point(65, 106);
+            this.LabelBrowserMeaning.Name = "LabelBrowserMeaning";
+            this.LabelBrowserMeaning.Size = new System.Drawing.Size(93, 27);
+            this.LabelBrowserMeaning.TabIndex = 6;
+            this.LabelBrowserMeaning.Text = "Meaning";
+            // 
+            // LabelBrowserConstruction
+            // 
+            this.LabelBrowserConstruction.AutoSize = true;
+            this.LabelBrowserConstruction.Location = new System.Drawing.Point(26, 65);
+            this.LabelBrowserConstruction.Name = "LabelBrowserConstruction";
+            this.LabelBrowserConstruction.Size = new System.Drawing.Size(132, 27);
+            this.LabelBrowserConstruction.TabIndex = 6;
+            this.LabelBrowserConstruction.Text = "Construction";
+            // 
+            // LabelBrowserID
+            // 
+            this.LabelBrowserID.AutoSize = true;
+            this.LabelBrowserID.Location = new System.Drawing.Point(124, 24);
+            this.LabelBrowserID.Name = "LabelBrowserID";
+            this.LabelBrowserID.Size = new System.Drawing.Size(34, 27);
+            this.LabelBrowserID.TabIndex = 6;
+            this.LabelBrowserID.Text = "ID";
+            // 
             // DataGridBrowseCards
             // 
+            this.DataGridBrowseCards.AllowUserToAddRows = false;
+            this.DataGridBrowseCards.AllowUserToDeleteRows = false;
             this.DataGridBrowseCards.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridBrowseCards.Location = new System.Drawing.Point(27, 327);
+            this.DataGridBrowseCards.Location = new System.Drawing.Point(31, 371);
             this.DataGridBrowseCards.Name = "DataGridBrowseCards";
+            this.DataGridBrowseCards.ReadOnly = true;
             this.DataGridBrowseCards.RowHeadersWidth = 62;
             this.DataGridBrowseCards.RowTemplate.Height = 28;
-            this.DataGridBrowseCards.Size = new System.Drawing.Size(1053, 222);
+            this.DataGridBrowseCards.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridBrowseCards.Size = new System.Drawing.Size(1049, 178);
             this.DataGridBrowseCards.TabIndex = 3;
+            // 
+            // PanelSearchCards
+            // 
+            this.PanelSearchCards.BackColor = System.Drawing.Color.MintCream;
+            this.PanelSearchCards.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSearchCards.Controls.Add(this.LabelBrowserSearchResultsFor);
+            this.PanelSearchCards.Controls.Add(this.ComboBoxSearchBy);
+            this.PanelSearchCards.Controls.Add(this.BtnSearch);
+            this.PanelSearchCards.Controls.Add(this.TxtSearch);
+            this.PanelSearchCards.Location = new System.Drawing.Point(449, 20);
+            this.PanelSearchCards.Name = "PanelSearchCards";
+            this.PanelSearchCards.Size = new System.Drawing.Size(646, 154);
+            this.PanelSearchCards.TabIndex = 5;
+            // 
+            // ComboBoxSearchBy
+            // 
+            this.ComboBoxSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBoxSearchBy.FormattingEnabled = true;
+            this.ComboBoxSearchBy.Items.AddRange(new object[] {
+            "Construction",
+            "Meaning",
+            "Example"});
+            this.ComboBoxSearchBy.Location = new System.Drawing.Point(308, 28);
+            this.ComboBoxSearchBy.Name = "ComboBoxSearchBy";
+            this.ComboBoxSearchBy.Size = new System.Drawing.Size(177, 35);
+            this.ComboBoxSearchBy.TabIndex = 4;
             // 
             // BtnSearch
             // 
-            this.BtnSearch.Location = new System.Drawing.Point(501, 122);
+            this.BtnSearch.Location = new System.Drawing.Point(504, 25);
             this.BtnSearch.Name = "BtnSearch";
             this.BtnSearch.Size = new System.Drawing.Size(105, 40);
             this.BtnSearch.TabIndex = 2;
             this.BtnSearch.Text = "Search";
             this.BtnSearch.UseVisualStyleBackColor = true;
+            this.BtnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // TxtSearch
             // 
-            this.TxtSearch.Location = new System.Drawing.Point(345, 58);
+            this.TxtSearch.Location = new System.Drawing.Point(28, 28);
             this.TxtSearch.Name = "TxtSearch";
-            this.TxtSearch.Size = new System.Drawing.Size(416, 35);
+            this.TxtSearch.Size = new System.Drawing.Size(261, 35);
             this.TxtSearch.TabIndex = 1;
             // 
             // TabSettings
@@ -359,7 +569,7 @@ namespace DrillConstructions
             this.BtnDeleteStorage.TabIndex = 3;
             this.BtnDeleteStorage.Text = "Delete Storage";
             this.BtnDeleteStorage.UseVisualStyleBackColor = false;
-            this.BtnDeleteStorage.Click += new System.EventHandler(this.BtnDeletetStorage_Click);
+            this.BtnDeleteStorage.Click += new System.EventHandler(this.BtnDeleteStorage_Click);
             // 
             // BtnSelectCurrentStorage
             // 
@@ -410,6 +620,15 @@ namespace DrillConstructions
             this.BtnCreateTable.UseVisualStyleBackColor = true;
             this.BtnCreateTable.Click += new System.EventHandler(this.BtnCreateTable_Click);
             // 
+            // LabelBrowserSearchResultsFor
+            // 
+            this.LabelBrowserSearchResultsFor.AutoSize = true;
+            this.LabelBrowserSearchResultsFor.Location = new System.Drawing.Point(41, 89);
+            this.LabelBrowserSearchResultsFor.Name = "LabelBrowserSearchResultsFor";
+            this.LabelBrowserSearchResultsFor.Size = new System.Drawing.Size(17, 27);
+            this.LabelBrowserSearchResultsFor.TabIndex = 5;
+            this.LabelBrowserSearchResultsFor.Text = " ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -424,6 +643,8 @@ namespace DrillConstructions
             this.TabBrowseCards.ResumeLayout(false);
             this.TabBrowseCards.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridBrowseCards)).EndInit();
+            this.PanelSearchCards.ResumeLayout(false);
+            this.PanelSearchCards.PerformLayout();
             this.TabSettings.ResumeLayout(false);
             this.PanelSelectStorage.ResumeLayout(false);
             this.PanelSelectStorage.PerformLayout();
@@ -467,6 +688,24 @@ namespace DrillConstructions
         private System.Windows.Forms.Label LabelAddingCardsInto;
         private System.Windows.Forms.Label LabelAddingIntoStorageName;
         private System.Windows.Forms.Label LabelAddCardInformation;
+        private System.Windows.Forms.ComboBox ComboBoxSearchBy;
+        private System.Windows.Forms.Panel PanelSearchCards;
+        private System.Windows.Forms.ComboBox ComboBoxBrowserType;
+        private System.Windows.Forms.TextBox TxtBrowserExample;
+        private System.Windows.Forms.TextBox TxtBrowserMeaning;
+        private System.Windows.Forms.TextBox TxtBrowserConstruction;
+        private System.Windows.Forms.TextBox TxtBrowserID;
+        private System.Windows.Forms.Label LabelBrowserType;
+        private System.Windows.Forms.Label LabelBrowserExample;
+        private System.Windows.Forms.Label LabelBrowserMeaning;
+        private System.Windows.Forms.Label LabelBrowserConstruction;
+        private System.Windows.Forms.Label LabelBrowserID;
+        private System.Windows.Forms.Button BtnSelectCard;
+        private System.Windows.Forms.Button BtnDeleteCard;
+        private System.Windows.Forms.Button BtnUpdateCard;
+        private System.Windows.Forms.Button BtnClearCardFieldsBrowseCards;
+        private System.Windows.Forms.Label LabelUpdateCardInformation;
+        private System.Windows.Forms.Label LabelBrowserSearchResultsFor;
     }
 }
 

@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -30,6 +33,9 @@ namespace DrillConstructions
             GetAvailableStorages();
             LabelCurrentStorage.Text = activeConstructionsStorage;
             LabelAddingIntoStorageName.Text = activeConstructionsStorage;
+            SetDefaultComboBoxSearchByType();
+            SetSearchResultForLabelWhenDisplayingAllCards();
+            DisableEnableBrowseCardsButtons();
         }
 
         private void SetDBConnection()
@@ -109,7 +115,7 @@ namespace DrillConstructions
             }
         }
 
-        private void BtnDeletetStorage_Click(object sender, EventArgs e)
+        private void BtnDeleteStorage_Click(object sender, EventArgs e)
         {
             string tableName = ComboBoxAvailableStorages.Text;
 
@@ -221,9 +227,10 @@ namespace DrillConstructions
 
             if (!emptyString)
             {
+                //TODO: to think of a better way to handle lower/upper cases
                 string createCard = "INSERT INTO " + activeConstructionsStorage +
                     " (Construction, Meaning, Example, Type) " +
-                    "VALUES ('" + TxtConstruction.Text + "', '" + TxtMeaning.Text + "', '" + TxtExample.Text + "', '" + ComboBoxType.Text + "')";
+                    "VALUES ('" + TxtConstruction.Text.ToLower() + "', '" + TxtMeaning.Text.ToLower() + "', '" + TxtExample.Text + "', '" + ComboBoxType.Text + "')";
 
                 sqlCommand.CommandText = createCard;
                 ExecuteQuery(createCard);
@@ -241,28 +248,7 @@ namespace DrillConstructions
             TxtConstruction.Clear();
             TxtMeaning.Clear();
             TxtExample.Clear();
-            ComboBoxType.ResetText();
-        }
-
-        private bool IsConvertibleTo<T>(object value)
-        {
-            try
-            {
-                T convertedValue = (T)Convert.ChangeType(value, typeof(T));
-                return true;
-            }
-            catch (InvalidCastException)
-            {
-                return false;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-            catch (OverflowException)
-            {
-                return false;
-            }
+            ClearComboBoxOnAddCardsTab();
         }
 
         private void BtnClear_Click(object sender, EventArgs e)
@@ -294,6 +280,334 @@ namespace DrillConstructions
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             ClearAllOnAddCardsTab();
+            ClearAllOnBrowseCardsTab();
+            LoadData(activeConstructionsStorage);
+            ClearSearchResultsForLabelOnBrowseCardsTab();
+            SetSearchResultForLabelWhenDisplayingAllCards();
         }
+
+        #region Add Cards tab
+
+        #region Add Cards tab: db
+
+        #endregion Add Cards tab: db
+
+        #region Add Cards tab: events
+
+        #endregion Add Cards tab: events
+
+        #region Add Cards tab: The tiniest methods
+
+        #endregion Add Cards tab: The tiniest methods
+
+        #endregion Add Cards tab
+
+        #region Browse Cards tab
+
+        #region Browse Cards tab: db
+
+        private void SearchData(string searchQuery, string searchBy, string activeStorage)
+        {
+            SetDBConnection();
+            sqlConnection.Open();
+            sqlCommand = sqlConnection.CreateCommand();
+            string commandText;
+
+            if (searchQuery == "")
+                commandText = $"SELECT * FROM {activeStorage}";
+            else
+                commandText = $"SELECT * FROM {activeStorage} WHERE {searchBy} LIKE '%{searchQuery}%'";
+
+            DB = new SQLiteDataAdapter(commandText, sqlConnection);
+            DS.Reset();
+            DB.Fill(DS);
+            sqlDT = DS.Tables[0];
+            DataGridBrowseCards.DataSource = sqlDT;
+            sqlConnection.Close();
+
+            if (searchQuery =="")
+                LabelBrowserSearchResultsFor.Text = $"Displaying all cards in storage '{activeStorage}'";
+            else
+                LabelBrowserSearchResultsFor.Text = $"Search results for '{TxtSearch.Text}' in '{ComboBoxSearchBy.Text}'";
+            ClearSearchTextBoxOnBrowseCardsTab();
+
+            ClearLabelUpdateCardInformation();
+            MakeFontForBrowseCardsLabelsBlack();
+            ClearAllOnBrowseCardsTab();
+        }
+
+        private void DeleteCardOnBrowseCardsTab(string activeStorage)
+        {
+            string cardConstruction = TxtBrowserConstruction.Text;
+
+            var confirmationPopUp = MessageBox.Show($"Are you sure you want to DELETE '{cardConstruction}' card?", "Think Twice", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            if (confirmationPopUp == DialogResult.Yes)
+            {
+
+                SetDBConnection();
+                sqlConnection.Open();
+                sqlCommand = sqlConnection.CreateCommand();
+                string commandDeleteCard;
+
+                commandDeleteCard = $"DELETE FROM {activeStorage} WHERE ID = {TxtBrowserID.Text}";
+
+                sqlCommand.CommandText = commandDeleteCard;
+                ExecuteQuery(commandDeleteCard);
+                sqlConnection.Close();
+
+                SetSearchResultForLabelWhenDisplayingAllCards();
+
+                MakeFontForBrowseCardsLabelsBlack();
+                ClearAllOnBrowseCardsTab();
+
+                LabelUpdateCardInformation.ForeColor = Color.Red;
+                LabelUpdateCardInformation.Text = $"Card '{cardConstruction}' has been DELETED.";
+
+                DisableEnableBrowseCardsButtons();
+
+                LoadData(activeStorage); 
+            }
+        }
+
+        private void ButtonUpdateCard_Click(object sender, EventArgs e)
+        {
+            SetDBConnection();
+            sqlConnection.Open();
+            sqlCommand = sqlConnection.CreateCommand();
+
+            KeyValuePair<Label, Control>[] textFields = { new KeyValuePair<Label, Control>(LabelBrowserConstruction, (Control)TxtBrowserConstruction),
+            new KeyValuePair<Label, Control>(LabelBrowserMeaning, (Control)TxtBrowserMeaning),
+            new KeyValuePair<Label, Control>(LabelBrowserExample, (Control)TxtBrowserExample),
+            new KeyValuePair<Label, Control>(LabelBrowserType, (Control)ComboBoxBrowserType)};
+
+            List<string> invalidTextFields = new List<string>();
+
+            bool emptyString = false;
+
+            foreach (var textField in textFields)
+            {
+                if (textField.Value.Text == "")
+                {
+                    if (IsConvertibleTo<TextBox>(textField.Value))
+                    {
+                        var convertedValue = (TextBox)textField.Value;
+                        convertedValue.Clear();
+                    }
+                    else if (IsConvertibleTo<ComboBox>(textField.Value))
+                    {
+                        var convertedValue = (ComboBox)textField.Value;
+                        convertedValue.ResetText();
+                    }
+
+                    textField.Key.ForeColor = Color.Red;
+                    LabelUpdateCardInformation.ForeColor = Color.Red;
+                    invalidTextFields.Add(textField.Key.Text);
+                    emptyString = true;
+                }
+                else
+                {
+                    textField.Key.ForeColor = SystemColors.ControlText;
+                }
+
+                if (invalidTextFields.Count == 1)
+                {
+                    LabelUpdateCardInformation.Text = $"'{textField.Key.Text}' field cannot be empty!";
+                }
+                else
+                {
+                    string invalidFieldsToDisplay = "";
+
+                    foreach (var invalidTextField in invalidTextFields)
+                    {
+                        if (!(invalidTextFields.IndexOf(invalidTextField) == invalidTextFields.Count - 1))
+                            invalidFieldsToDisplay += $"{invalidTextField}, ";
+                        else
+                            invalidFieldsToDisplay += $"{invalidTextField}";
+                    }
+
+                    LabelUpdateCardInformation.Text = $"'{invalidFieldsToDisplay}' fields cannot be empty!";
+                }
+            }
+
+            if (!emptyString)
+            {
+                //TODO: to think of a better way to handle lower/upper cases
+                string updateCard = $"UPDATE {activeConstructionsStorage} " +
+                    $"SET Construction = '{TxtBrowserConstruction.Text.ToLower()}', " +
+                    $"Meaning = '{TxtBrowserMeaning.Text.ToLower()}', " +
+                    $"Example = '{TxtBrowserExample.Text}', " +
+                    $"Type = '{ComboBoxBrowserType.Text}' " +
+                    $"WHERE ID = '{TxtBrowserID.Text}'";
+
+                sqlCommand.CommandText = updateCard;
+                ExecuteQuery(updateCard);
+                sqlConnection.Close();
+
+                string cardID = TxtBrowserID.Text;
+
+                SetSearchResultForLabelWhenDisplayingAllCards();
+
+                LabelUpdateCardInformation.ForeColor = Color.ForestGreen;
+                MakeFontForBrowseCardsLabelsBlack();
+
+                ClearAllOnBrowseCardsTab();
+
+                LabelUpdateCardInformation.Text = $"Card with ID '{cardID}' has been updated in '{activeConstructionsStorage}'.";
+                
+                DisableEnableBrowseCardsButtons();
+
+                LoadData(activeConstructionsStorage);
+            }
+            else { }
+        }
+
+        #endregion Browse Cards tab: db
+
+        #region Browse Cards tab: events
+
+        private void BtnDeleteCard_Click(object sender, EventArgs e)
+        {
+            DeleteCardOnBrowseCardsTab(activeConstructionsStorage);
+        }
+
+        private void BtnClearCardFieldsBrowseCards_Click(object sender, EventArgs e)
+        {
+            ClearAllOnBrowseCardsTab();
+            DisableEnableBrowseCardsButtons();
+        }
+
+        private void BtnSelectCard_Click(object sender, EventArgs e)
+        {
+            TxtBrowserID.Text = GetCellDataByCellNumber(0);
+            TxtBrowserConstruction.Text = GetCellDataByCellNumber(1);
+            TxtBrowserMeaning.Text = GetCellDataByCellNumber(2);
+            TxtBrowserExample.Text = GetCellDataByCellNumber(3);
+            ComboBoxBrowserType.Text = GetCellDataByCellNumber(4);
+
+            ClearLabelUpdateCardInformation();
+            MakeFontForBrowseCardsLabelsBlack();
+
+            DisableEnableBrowseCardsButtons();
+        }
+
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+            SearchData(TxtSearch.Text, ComboBoxSearchBy.Text, activeConstructionsStorage);
+        }
+
+        #endregion Browse Cards tab: events
+
+        #region Browse Cards tab: The tiniest methods
+
+        private void DisableEnableBrowseCardsButtons()
+        {
+            if (TxtBrowserID.Text == "")
+            {
+                BtnUpdateCard.Enabled = false;
+                BtnDeleteCard.Enabled = false;
+            }
+            else
+            {
+                BtnUpdateCard.Enabled = true;
+                BtnDeleteCard.Enabled = true;
+            }
+        }
+
+        private void ClearSearchResultsForLabelOnBrowseCardsTab()
+        {
+            LabelBrowserSearchResultsFor.Text = "";
+        }
+
+        private void SetSearchResultForLabelWhenDisplayingAllCards()
+        {
+            LabelBrowserSearchResultsFor.Text = $"Displaying all cards in storage '{activeConstructionsStorage}'";
+        }
+
+        private void ClearSearchTextBoxOnBrowseCardsTab()
+        {
+            TxtSearch.Text = "";
+        }
+
+        private void ClearComboBoxOnBrowseCardsTab()
+        {
+            ComboBoxBrowserType.SelectedIndex = -1;
+        }
+
+        private string GetCellDataByCellNumber(int cellNumber)
+        {
+            return DataGridBrowseCards.SelectedRows[0].Cells[cellNumber].Value.ToString();
+        }
+
+        private void ClearAllOnBrowseCardsTab()
+        {
+            MakeFontForBrowseCardsLabelsBlack();
+            ClearLabelUpdateCardInformation();
+            ClearBrowseCardsFields();
+            ClearComboBoxOnBrowseCardsTab();
+        }
+
+        private void ClearBrowseCardsFields()
+        {
+            TxtBrowserID.Text = "";
+            TxtBrowserConstruction.Text = "";
+            TxtBrowserMeaning.Text = "";
+            TxtBrowserExample.Text = "";
+        }
+
+        private void MakeFontForBrowseCardsLabelsBlack()
+        {
+            LabelBrowserConstruction.ForeColor = Color.Black;
+            LabelBrowserMeaning.ForeColor = Color.Black;
+            LabelBrowserExample.ForeColor = Color.Black;
+            LabelBrowserType.ForeColor = Color.Black;
+        }
+
+        private void ClearLabelUpdateCardInformation()
+        {
+            LabelUpdateCardInformation.Text = "";
+        }
+
+        private void ClearComboBoxOnAddCardsTab()
+        {
+            ComboBoxType.SelectedIndex = -1;
+        }
+
+        private void SetDefaultComboBoxSearchByType()
+        {
+            ComboBoxSearchBy.SelectedItem = "Construction";
+        }
+
+        #endregion Browse Cards tab: The tiniest methods
+
+        #endregion Browse Cards tab
+
+        #region General helper methods
+
+        private bool IsConvertibleTo<T>(object value)
+        {
+            try
+            {
+                T convertedValue = (T)Convert.ChangeType(value, typeof(T));
+                return true;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            catch (OverflowException)
+            {
+                return false;
+            }
+        }
+
+
+        #endregion
+
+        
+    
     }
 }
