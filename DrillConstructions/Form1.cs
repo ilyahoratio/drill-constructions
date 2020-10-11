@@ -1,16 +1,10 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DrillConstructions
@@ -131,7 +125,6 @@ namespace DrillConstructions
                 GetAvailableStorages();
                 MessageBox.Show($"Storage '{tableName}' has been DELETED.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else { }
         }
 
         private void GetAvailableStorages()
@@ -150,7 +143,7 @@ namespace DrillConstructions
             sqlCommand.CommandText = commandText;
             SQLiteDataReader dataBaseReader = sqlCommand.ExecuteReader();
 
-            string tableName; ;
+            string tableName;
             while(dataBaseReader.Read())
             {
                 tableName = (string)dataBaseReader["tbl_Name"];
@@ -211,16 +204,15 @@ namespace DrillConstructions
                 }
                 else
                 {
-                    string invalidFieldsToDisplay = "";
-
+                    StringBuilder buildingString = new StringBuilder();
                     foreach(var invalidTextField in invalidTextFields)
                     {
-                        if (!(invalidTextFields.IndexOf(invalidTextField) == invalidTextFields.Count - 1))
-                            invalidFieldsToDisplay += $"{invalidTextField}, ";
+                        if ((invalidTextFields.IndexOf(invalidTextField) != invalidTextFields.Count - 1))
+                            buildingString.Append($"{invalidTextField}, ");
                         else
-                            invalidFieldsToDisplay += $"{invalidTextField}";
+                            buildingString.Append($"{invalidTextField}");
                     }
-
+                    string invalidFieldsToDisplay = buildingString.ToString();
                     LabelAddCardInformation.Text = $"'{invalidFieldsToDisplay}' fields cannot be empty!";
                 }
             }
@@ -240,7 +232,6 @@ namespace DrillConstructions
                 ClearAddCardFields();
                 LoadData(activeConstructionsStorage);
             }
-            else { }
         }
 
         private void ClearAddCardFields()
@@ -383,7 +374,6 @@ namespace DrillConstructions
             List<string> invalidTextFields = new List<string>();
 
             bool emptyString = false;
-
             foreach (var textField in textFields)
             {
                 if (textField.Value.Text == "")
@@ -415,16 +405,16 @@ namespace DrillConstructions
                 }
                 else
                 {
-                    string invalidFieldsToDisplay = "";
-
+                    StringBuilder buildingString = new StringBuilder();
                     foreach (var invalidTextField in invalidTextFields)
                     {
-                        if (!(invalidTextFields.IndexOf(invalidTextField) == invalidTextFields.Count - 1))
-                            invalidFieldsToDisplay += $"{invalidTextField}, ";
+                        if ((invalidTextFields.IndexOf(invalidTextField) != invalidTextFields.Count - 1))
+                            buildingString.Append($"{invalidTextField}, ");
                         else
-                            invalidFieldsToDisplay += $"{invalidTextField}";
-                    }
+                            buildingString.Append($"{invalidTextField}");
 
+                    }
+                    string invalidFieldsToDisplay = buildingString.ToString();
                     LabelUpdateCardInformation.Text = $"'{invalidFieldsToDisplay}' fields cannot be empty!";
                 }
             }
@@ -458,7 +448,6 @@ namespace DrillConstructions
 
                 LoadData(activeConstructionsStorage);
             }
-            else { }
         }
 
         #endregion Browse Cards tab: db
@@ -587,7 +576,7 @@ namespace DrillConstructions
         {
             try
             {
-                T convertedValue = (T)Convert.ChangeType(value, typeof(T));
+                Convert.ChangeType(value, typeof(T));
                 return true;
             }
             catch (InvalidCastException)
