@@ -6,8 +6,6 @@ using static DesktopAppTestAutomation.Helpers.ClickerHelpers;
 using static DesktopAppTestAutomation.Pages.AddCardsTabPageObject;
 using static DesktopAppTestAutomation.Pages.BasePageObject;
 using DesktopAppTestAutomation.Helpers;
-using System.Configuration;
-using OpenQA.Selenium;
 using DesktopAppTestAutomation.Configuration;
 using DesktopAppTestAutomation.Interfaces;
 using DesktopAppTestAutomation.Driver;
@@ -18,14 +16,14 @@ namespace DesktopAppTestAutomation
     public class AddCardsTab
     {
         private WindowsDriver<WindowsElement> Driver { get; set; }
-        IConfig config = new AppConfigReader();
-        private WinAppDriver appDriver = new WinAppDriver();
+        readonly IConfig config = new AppConfigReader();
+        private readonly WinAppDriver appDriver = new WinAppDriver();
 
         [ClassInitialize]
         public static void InitializeBeforeAllTestCases(TestContext context)
         {
-            WinAppDriver appDriver = new WinAppDriver();
-            appDriver.LaunchWinAppDriverProcess();
+            WinAppDriver winAppDriver = new WinAppDriver();
+            winAppDriver.LaunchWinAppDriverProcess();
         }
 
         [TestInitialize]
@@ -43,8 +41,8 @@ namespace DesktopAppTestAutomation
         [ClassCleanup]
         public static void CleanUpAfterAllTestCases()
         {
-            WinAppDriver appDriver = new WinAppDriver();
-            appDriver.CloseAppiumProcesses();
+            WinAppDriver winAppDriver = new WinAppDriver();
+            winAppDriver.CloseAppiumProcesses();
         }
 
         [TestMethod]
@@ -99,5 +97,12 @@ namespace DesktopAppTestAutomation
             AssertHelpers.IsElementNotPresent(Driver, labelCreateCardValidation);
         }
 
+        [TestMethod]
+        public void DefaultLabelValuesOnAddCardsTab()
+        {
+            Driver.ClickElementByName(tabNameAddCards);
+            var arrayOfExpectedLabels = new string[] { "Adding Cards into Storage: ", "Construction", "Meaning", "Example", "Type" };
+            AssertHelpers.DoLabelsMatch(Driver, listOfLabels, arrayOfExpectedLabels);
+        }
     }
 }

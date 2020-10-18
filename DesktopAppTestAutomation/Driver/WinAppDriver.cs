@@ -9,7 +9,7 @@ namespace DesktopAppTestAutomation.Driver
 {
     public class WinAppDriver
     {
-        IConfig config = new AppConfigReader();
+        readonly IConfig config = new AppConfigReader();
         private static Process appiumLocalHostConsole;
 
         public WindowsDriver<WindowsElement> GetWinAppDriver()

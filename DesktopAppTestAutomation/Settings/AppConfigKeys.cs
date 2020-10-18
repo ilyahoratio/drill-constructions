@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DesktopAppTestAutomation.Settings
+﻿namespace DesktopAppTestAutomation.Settings
 {
-    public class AppConfigKeys
+    public static class AppConfigKeys
     {
         public const string DefaultStorageName = "DefaultStorageName";
         public const string AppiumLocalHostUri = "AppiumLocalHostUri";

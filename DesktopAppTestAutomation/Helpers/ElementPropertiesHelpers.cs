@@ -1,15 +1,11 @@
 ﻿using OpenQA.Selenium.Appium.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesktopAppTestAutomation.Helpers
 {
     public static class ElementPropertiesHelpers
     {
-        //ToDo : add waiter helpers 
+        //TODO : add waiter helpers 
         public static WindowsElement GetElementPropertiesByAccessID(this WindowsDriver<WindowsElement> driver, string elementAccessID)
         {
             return driver.FindElementByAccessibilityId(elementAccessID);

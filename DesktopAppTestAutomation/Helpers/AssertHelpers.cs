@@ -3,9 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesktopAppTestAutomation.Helpers
 {
@@ -24,6 +21,14 @@ namespace DesktopAppTestAutomation.Helpers
             foreach (var windowsElement in listOfElements)
             {
                 Assert.IsTrue(driver.IsElementEnabled(windowsElement));
+            }
+        }
+
+        public static void DoLabelsMatch<T>(WindowsDriver<WindowsElement> driver, List<T> listOfElements, string[] listOfExpectedLabels)
+        {
+            for (int i = 0; i < listOfElements.Count; i ++)
+            {
+                Assert.AreEqual(listOfExpectedLabels[i], listOfElements[i].ToString());
             }
         }
 

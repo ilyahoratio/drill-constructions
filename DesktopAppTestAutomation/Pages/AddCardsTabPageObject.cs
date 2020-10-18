@@ -1,9 +1,5 @@
-﻿using System;
+﻿using DesktopAppTestAutomation.Models;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesktopAppTestAutomation.Pages
 {
@@ -18,8 +14,16 @@ namespace DesktopAppTestAutomation.Pages
 
         #region Labels
 
-        public static string labelCreateCardValidation = "LabelAddCardInformation";
         public static string labelDefaultStorage = "LabelAddingIntoStorageName";
+        public static string labelCreateCardValidation = "LabelAddCardInformation";
+
+
+        public static LabelTextModel labelAddingCardsInto = new LabelTextModel("LabelAddingCardsInto", "Adding Cards into Storage: ");
+        public static LabelTextModel labelConstruction = new LabelTextModel("LabelConstruction", "Construction");
+        public static LabelTextModel labelMeaning = new LabelTextModel("LabelMeaning", "Meaning");
+        public static LabelTextModel labelExample = new LabelTextModel("LabelExample", "Example");
+        public static LabelTextModel labelType = new LabelTextModel("LabelType", "Type");
+        
 
         #endregion
 
@@ -42,6 +46,11 @@ namespace DesktopAppTestAutomation.Pages
         public static List<string> listOfClickableElements = new List<string>()
         {
             textFieldConstruction, textFieldMeaning, textFieldExample, dropDownMenuType, buttonCreateCard, buttonClear
+        };
+
+        public static List<LabelTextModel> listOfLabels = new List<LabelTextModel>()
+        {
+            labelAddingCardsInto, labelConstruction, labelMeaning, labelExample, labelType
         };
 
         #endregion
