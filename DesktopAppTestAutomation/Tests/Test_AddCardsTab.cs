@@ -3,12 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using static DesktopAppTestAutomation.Helpers.ClickerHelpers;
-using static DesktopAppTestAutomation.Pages.AddCardsTabPageObject;
 using static DesktopAppTestAutomation.Pages.BasePageObject;
 using DesktopAppTestAutomation.Helpers;
 using DesktopAppTestAutomation.Configuration;
 using DesktopAppTestAutomation.Interfaces;
 using DesktopAppTestAutomation.Driver;
+using DesktopAppTestAutomation.Pages;
 
 namespace DesktopAppTestAutomation
 {
@@ -18,6 +18,7 @@ namespace DesktopAppTestAutomation
         private WindowsDriver<WindowsElement> Driver { get; set; }
         readonly IConfig config = new AppConfigReader();
         private readonly WinAppDriver appDriver = new WinAppDriver();
+        private AddCardsTabPageObject addCardsTab;
 
         [ClassInitialize]
         public static void InitializeBeforeAllTestCases(TestContext context)
@@ -30,6 +31,7 @@ namespace DesktopAppTestAutomation
         public void InitializeForEachTestCase()
         {
             Driver = appDriver.GetWinAppDriver();
+            addCardsTab = new AddCardsTabPageObject(Driver);
         }
 
         [TestCleanup]
@@ -50,51 +52,51 @@ namespace DesktopAppTestAutomation
         public void EmptyCardCreationValidation()
         {
             Driver.ClickElementByName(tabNameAddCards);
-            Driver.ClickElementByAccessID(buttonCreateCard);
-            Assert.AreEqual("'Construction, Meaning, Example, Type' fields cannot be empty!", Driver.GetElementPropertiesByAccessID(labelCreateCardValidation).Text);
+            Driver.ClickElementByAccessID(addCardsTab.ButtonCreateCard);
+            Assert.AreEqual("'Construction, Meaning, Example, Type' fields cannot be empty!", Driver.GetElementPropertiesByAccessID(addCardsTab.LabelCreateCardValidation).Text);
         }
 
         [TestMethod]
         public void DefaultValuesOnAddCardsTab()
         {
             Driver.ClickElementByName(tabNameAddCards);
-            var defaultStorage = Driver.GetElementPropertiesByAccessID(labelDefaultStorage).Text;
+            var defaultStorage = Driver.GetElementPropertiesByAccessID(addCardsTab.LabelDefaultStorage).Text;
             Assert.AreEqual(config.GetDefaultStorageName(), defaultStorage);
 
-            AssertHelpers.AreTextFieldsEmpty(Driver, listOfTextFields);
-            AssertHelpers.IsElementNotPresent(Driver, labelCreateCardValidation);
-            AssertHelpers.AreElementsClickable(Driver, listOfClickableElements);
+            AssertHelpers.AreTextFieldsEmpty(Driver, addCardsTab.ListOfTextFields);
+            AssertHelpers.IsElementNotPresent(Driver, addCardsTab.LabelCreateCardValidation);
+            AssertHelpers.AreElementsClickable(Driver, addCardsTab.ListOfClickableElements);
         }
 
         [TestMethod]
         public void ClearButtonClearsPopulatedFields()
         {
             Driver.ClickElementByName(tabNameAddCards);
-            Driver.PopulateTextField(textFieldConstruction, "cons1");
-            Driver.PopulateTextField(textFieldMeaning, "mean1");
-            Driver.PopulateTextField(textFieldExample, "exam1");
-            Driver.PopulateTextField(dropDownMenuType, "Question");
+            Driver.PopulateTextField(addCardsTab.TextFieldConstruction, "cons1");
+            Driver.PopulateTextField(addCardsTab.TextFieldMeaning, "mean1");
+            Driver.PopulateTextField(addCardsTab.TextFieldExample, "exam1");
+            Driver.PopulateTextField(addCardsTab.DropDownMenuType, "Question");
 
-            Driver.ClickElementByAccessID(buttonClear);
+            Driver.ClickElementByAccessID(addCardsTab.ButtonClear);
 
-            AssertHelpers.AreTextFieldsEmpty(Driver, listOfTextFields);
-            AssertHelpers.IsElementNotPresent(Driver, labelCreateCardValidation);
+            AssertHelpers.AreTextFieldsEmpty(Driver, addCardsTab.ListOfTextFields);
+            AssertHelpers.IsElementNotPresent(Driver, addCardsTab.LabelCreateCardValidation);
         }
 
         [TestMethod]
         public void ClearPopulatedFieldsBySwitchingToADifferentTab()
         {
             Driver.ClickElementByName(tabNameAddCards);
-            Driver.PopulateTextField(textFieldConstruction, "cons1");
-            Driver.PopulateTextField(textFieldMeaning, "mean1");
-            Driver.PopulateTextField(textFieldExample, "exam1");
-            Driver.PopulateTextField(dropDownMenuType, "Question");
+            Driver.PopulateTextField(addCardsTab.TextFieldConstruction, "cons1");
+            Driver.PopulateTextField(addCardsTab.TextFieldMeaning, "mean1");
+            Driver.PopulateTextField(addCardsTab.TextFieldExample, "exam1");
+            Driver.PopulateTextField(addCardsTab.DropDownMenuType, "Question");
 
             Driver.ClickElementByName(tabNameBrowseCards);
             Driver.ClickElementByName(tabNameAddCards);
 
-            AssertHelpers.AreTextFieldsEmpty(Driver, listOfTextFields);
-            AssertHelpers.IsElementNotPresent(Driver, labelCreateCardValidation);
+            AssertHelpers.AreTextFieldsEmpty(Driver, addCardsTab.ListOfTextFields);
+            AssertHelpers.IsElementNotPresent(Driver, addCardsTab.LabelCreateCardValidation);
         }
 
         [TestMethod]
@@ -102,7 +104,7 @@ namespace DesktopAppTestAutomation
         {
             Driver.ClickElementByName(tabNameAddCards);
             var arrayOfExpectedLabels = new string[] { "Adding Cards into Storage: ", "Construction", "Meaning", "Example", "Type" };
-            AssertHelpers.DoLabelsMatch(Driver, listOfLabels, arrayOfExpectedLabels);
+            AssertHelpers.DoLabelsMatch(Driver, addCardsTab.ListOfLabels, arrayOfExpectedLabels);
         }
     }
 }
