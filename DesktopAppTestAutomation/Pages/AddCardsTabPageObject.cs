@@ -1,56 +1,59 @@
 ﻿using DesktopAppTestAutomation.Models;
+using OpenQA.Selenium.Appium.Windows;
 using System.Collections.Generic;
 
 namespace DesktopAppTestAutomation.Pages
 {
-    public static class AddCardsTabPageObject
+    internal class AddCardsTabPageObject : BasePageObject
     {
         #region Buttons
 
-        public static string buttonCreateCard = "BtnCreateCard";
-        public static string buttonClear = "BtnClear";
+        public AddCardsTabPageObject(WindowsDriver<WindowsElement> winDriver) : base(winDriver) { }
+
+        public string ButtonCreateCard => "BtnCreateCard";
+        public string ButtonClear => "BtnClear";
 
         #endregion
 
         #region Labels
 
-        public static string labelDefaultStorage = "LabelAddingIntoStorageName";
-        public static string labelCreateCardValidation = "LabelAddCardInformation";
+        public string LabelDefaultStorage => "LabelAddingIntoStorageName";
+        public string LabelCreateCardValidation => "LabelAddCardInformation";
 
 
-        public static LabelTextModel labelAddingCardsInto = new LabelTextModel("LabelAddingCardsInto", "Adding Cards into Storage: ");
-        public static LabelTextModel labelConstruction = new LabelTextModel("LabelConstruction", "Construction");
-        public static LabelTextModel labelMeaning = new LabelTextModel("LabelMeaning", "Meaning");
-        public static LabelTextModel labelExample = new LabelTextModel("LabelExample", "Example");
-        public static LabelTextModel labelType = new LabelTextModel("LabelType", "Type");
+        public LabelTextModel LabelAddingCardsInto => new LabelTextModel("LabelAddingCardsInto", "Adding Cards into Storage: ");
+        public LabelTextModel LabelConstruction => new LabelTextModel("LabelConstruction", "Construction");
+        public LabelTextModel LabelMeaning => new LabelTextModel("LabelMeaning", "Meaning");
+        public LabelTextModel LabelExample => new LabelTextModel("LabelExample", "Example");
+        public LabelTextModel LabelType => new LabelTextModel("LabelType", "Type");
         
 
         #endregion
 
         #region Text Fields 
 
-        public static string textFieldConstruction = "TxtConstruction";
-        public static string textFieldMeaning = "TxtMeaning";
-        public static string textFieldExample = "TxtExample";
-        public static string dropDownMenuType = "ComboBoxType";
+        public string TextFieldConstruction => "TxtConstruction";
+        public string TextFieldMeaning => "TxtMeaning";
+        public string TextFieldExample => "TxtExample";
+        public string DropDownMenuType => "ComboBoxType";
 
         #endregion
 
         #region Lists
 
-        public static List<string> listOfTextFields = new List<string>()
+        public List<string> ListOfTextFields => new List<string>()
         {
-            textFieldConstruction, textFieldMeaning, textFieldExample, dropDownMenuType
+            TextFieldConstruction, TextFieldMeaning, TextFieldExample, DropDownMenuType
         };
 
-        public static List<string> listOfClickableElements = new List<string>()
+        public List<string> ListOfClickableElements => new List<string>()
         {
-            textFieldConstruction, textFieldMeaning, textFieldExample, dropDownMenuType, buttonCreateCard, buttonClear
+            TextFieldConstruction, TextFieldMeaning, TextFieldExample, DropDownMenuType, ButtonCreateCard, ButtonClear
         };
 
-        public static List<LabelTextModel> listOfLabels = new List<LabelTextModel>()
+        public List<LabelTextModel> ListOfLabels => new List<LabelTextModel>()
         {
-            labelAddingCardsInto, labelConstruction, labelMeaning, labelExample, labelType
+            LabelAddingCardsInto, LabelConstruction, LabelMeaning, LabelExample, LabelType
         };
 
         #endregion
