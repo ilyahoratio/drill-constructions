@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static DrillConstructions.AppConfiguration.Configuration;
 
 namespace DrillConstructions
 {
@@ -17,7 +18,7 @@ namespace DrillConstructions
 				private DataTable sqlDT = new DataTable();
 				private DataSet DS = new DataSet();
 				private SQLiteDataAdapter DB;
-				private string activeConstructionsStorage = "LanguageConstructions";
+				private string activeConstructionsStorage = GetDefaultLanguageStorage();
 				private List<Storage> listOfAvailableStorages = new List<Storage>();
 
 				public Form1()
@@ -36,7 +37,7 @@ namespace DrillConstructions
 
 				private void SetDBConnection()
 				{
-						sqlConnection = new SQLiteConnection($"Data Source=.\\LanguageConstructions.db; Version=3");
+						sqlConnection = new SQLiteConnection($"Data Source=.\\{GetDefaultLanguageStorage()}.db; Version=3");
 				}
 
 				private void Complex_ExecuteQuery(string query)
@@ -144,6 +145,10 @@ namespace DrillConstructions
 								Complex_ExecuteQuery(deleteTable);
 								ComboBoxAvailableStorages.ResetText();
 								GetAvailableStorages();
+								activeConstructionsStorage = GetDefaultLanguageStorage();
+								Complex_LoadData(activeConstructionsStorage);
+								LabelCurrentStorage.Text = activeConstructionsStorage;
+								LabelAddingIntoStorageName.Text = activeConstructionsStorage;
 								MessageBox.Show($"Storage '{tableName}' has been DELETED.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 				}
