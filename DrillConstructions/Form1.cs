@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using static DrillConstructions.AppConfiguration.Configuration;
@@ -31,6 +32,8 @@ namespace DrillConstructions
 						SetDefaultComboBoxSearchByType();
 						SetSearchResultForLabelWhenDisplayingAllCards();
 						DisableEnableBrowseCardsButtons();
+						DisableEnableDeleteStorageButton();
+						DisableEnableSelectStorageButton();
 				}
 
 				#region Reusable DB methods
@@ -88,29 +91,36 @@ namespace DrillConstructions
 				{
 						string tableName = TxtNewTableName.Text;
 
-						var confirmationPopUp = MessageBox.Show($"Are you sure you want to create a new Storage '{tableName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-						if (confirmationPopUp == DialogResult.Yes)
+						if (IsCreateStorageTextFieldInvalid(tableName))
 						{
-								// TODO: add validation for empty string before creating a table
 
-								string createNewTable = "CREATE TABLE '" + tableName + "' ('ID' INTEGER NOT NULL UNIQUE," +
-								"'Construction'  TEXT NOT NULL UNIQUE," +
-								"'Meaning'   TEXT NOT NULL," +
-								"'Example'   TEXT NOT NULL," +
-								"'Type'  TEXT NOT NULL," +
-								"PRIMARY KEY('ID' AUTOINCREMENT));";
-
-								Complex_ExecuteQuery(createNewTable);
-
-								TxtNewTableName.Clear();
-								GetAvailableStorages();
-								MessageBox.Show($"New Storage '{tableName}' has been created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 						else
 						{
-								TxtNewTableName.Clear();
-								GetAvailableStorages();
-								MessageBox.Show($"Adding new Storage has been canceled.", "Canceled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+								var confirmationPopUp = MessageBox.Show($"Are you sure you want to create a new Storage '{tableName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+								if (confirmationPopUp == DialogResult.Yes)
+								{
+										// TODO: add validation for empty string before creating a table
+
+										string createNewTable = "CREATE TABLE '" + tableName + "' ('ID' INTEGER NOT NULL UNIQUE," +
+										"'Construction'  TEXT NOT NULL UNIQUE," +
+										"'Meaning'   TEXT NOT NULL," +
+										"'Example'   TEXT NOT NULL," +
+										"'Type'  TEXT NOT NULL," +
+										"PRIMARY KEY('ID' AUTOINCREMENT));";
+
+										Complex_ExecuteQuery(createNewTable);
+
+										TxtNewTableName.Clear();
+										GetAvailableStorages();
+										MessageBox.Show($"New Storage '{tableName}' has been created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+								}
+								else
+								{
+										TxtNewTableName.Clear();
+										GetAvailableStorages();
+										MessageBox.Show($"Adding new Storage has been canceled.", "Canceled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+								}
 						}
 				}
 
@@ -124,7 +134,10 @@ namespace DrillConstructions
 								Complex_LoadData(activeConstructionsStorage);
 								LabelCurrentStorage.Text = activeConstructionsStorage;
 								LabelAddingIntoStorageName.Text = activeConstructionsStorage;
-								MessageBox.Show($"Current Storage has been switched to '{ComboBoxAvailableStorages.Text}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+								ClearCreateStorageFields();
+								DisableEnableDeleteStorageButton();
+								DisableEnableSelectStorageButton();
+								MessageBox.Show($"Current Storage has been switched to '{activeConstructionsStorage}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 						else
 						{
@@ -134,7 +147,7 @@ namespace DrillConstructions
 
 				private void BtnDeleteStorage_Click(object sender, EventArgs e)
 				{
-						string tableName = ComboBoxAvailableStorages.Text;
+						string tableName = activeConstructionsStorage;
 
 						var confirmationPopUp = MessageBox.Show($"Are you sure you want to DELETE '{tableName}' Storage?", "Think Twice", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
 						if (confirmationPopUp == DialogResult.Yes)
@@ -149,6 +162,9 @@ namespace DrillConstructions
 								Complex_LoadData(activeConstructionsStorage);
 								LabelCurrentStorage.Text = activeConstructionsStorage;
 								LabelAddingIntoStorageName.Text = activeConstructionsStorage;
+								ClearCreateStorageFields();
+								DisableEnableDeleteStorageButton();
+								DisableEnableSelectStorageButton();
 								MessageBox.Show($"Storage '{tableName}' has been DELETED.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 				}
@@ -192,6 +208,75 @@ namespace DrillConstructions
 
 				#endregion
 
+				#region Settings tab: events 
+
+				private void TxtNewTableName_TextChanged(object sender, EventArgs e)
+				{
+						LabelCreateStorageInformation.Text = "";
+				}
+
+				private void ComboBoxAvailableStorages_SelectedIndexChanged(object sender, EventArgs e)
+				{
+						BtnSelectCurrentStorage.Enabled = true;
+				}
+
+				#endregion
+
+				#region Settings tab: The tiniest methods
+
+				private void ClearCreateStorageFields()
+				{
+						TxtNewTableName.Text = "";
+						LabelCreateStorageInformation.Text = "";
+				}
+
+				private void ClearSettingsFields()
+				{
+						ComboBoxAvailableStorages.SelectedIndex = -1;
+						ClearCreateStorageFields();
+						DisableEnableDeleteStorageButton();
+						DisableEnableSelectStorageButton();
+				}
+
+				public bool IsCreateStorageTextFieldInvalid(string inputTableName)
+				{
+						bool IsCreateTableTextFieldInvalid = inputTableName.Any(Char.IsWhiteSpace) || String.IsNullOrWhiteSpace(inputTableName);
+
+						if (IsCreateTableTextFieldInvalid)
+						{
+								LabelCreateStorageInformation.ForeColor = Color.Red;
+								LabelCreateStorageInformation.Text = "Storage name can't be empty or contain spaces in its name";
+						}
+
+						return IsCreateTableTextFieldInvalid;
+				}
+
+				private void DisableEnableDeleteStorageButton()
+				{
+						if (activeConstructionsStorage == GetDefaultLanguageStorage())
+						{
+								BtnDeleteStorage.Enabled = false;
+						}
+						else
+						{
+								BtnDeleteStorage.Enabled = true;
+						}
+				}
+
+				private void DisableEnableSelectStorageButton()
+				{
+						if (ComboBoxAvailableStorages.Text == "")
+						{
+								BtnSelectCurrentStorage.Enabled = false;
+						}
+						else
+						{
+								BtnSelectCurrentStorage.Enabled = true;
+						}
+				}
+
+				#endregion
+
 				#endregion
 
 				//TODO: to think of the better way to handle this
@@ -202,6 +287,7 @@ namespace DrillConstructions
 						Complex_LoadData(activeConstructionsStorage);
 						ClearSearchResultsForLabelOnBrowseCardsTab();
 						SetSearchResultForLabelWhenDisplayingAllCards();
+						ClearSettingsFields();
 				}
 
 				#region Add Cards tab
@@ -620,6 +706,7 @@ namespace DrillConstructions
 								return false;
 						}
 				}
+
 
 
 				#endregion
