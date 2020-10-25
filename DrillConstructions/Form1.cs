@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DrillConstructions.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -43,6 +44,7 @@ namespace DrillConstructions
 						sqlConnection = new SQLiteConnection($"Data Source=.\\{GetDefaultLanguageStorage()}.db; Version=3");
 				}
 
+
 				private void Complex_ExecuteQuery(string query)
 				{
 						try
@@ -51,6 +53,41 @@ namespace DrillConstructions
 								sqlConnection.Open();
 								sqlCommand = sqlConnection.CreateCommand();
 								sqlCommand.CommandText = query;
+								sqlCommand.ExecuteNonQuery();
+						}
+						finally
+						{
+								sqlCommand.Dispose();
+								sqlConnection.Close();
+						}
+				}
+
+				private void Complex_ExecuteQuery(string query, CardModel card)
+				{
+						List<SQLiteParameter> listOfParameters = new List<SQLiteParameter>();
+
+						if (card.Construction.Value != null)
+								listOfParameters.Add(new SQLiteParameter(card.Construction.Key, card.Construction.Value));
+
+						if (card.Meaning.Value != null)
+								listOfParameters.Add(new SQLiteParameter(card.Meaning.Key, card.Meaning.Value));
+
+						if (card.Example.Value != null)
+								listOfParameters.Add(new SQLiteParameter(card.Example.Key, card.Example.Value));
+
+						if (card.Type.Value != null)
+								listOfParameters.Add(new SQLiteParameter(card.Type.Key, card.Type.Value));
+
+						if (card.ID.Value != null)
+								listOfParameters.Add(new SQLiteParameter(card.ID.Key, card.ID.Value));
+
+						try
+						{
+								SetDBConnection();
+								sqlConnection.Open();
+								sqlCommand = sqlConnection.CreateCommand();
+								sqlCommand.CommandText = query;
+								sqlCommand.Parameters.AddRange(listOfParameters.ToArray<SQLiteParameter>());
 								sqlCommand.ExecuteNonQuery();
 						}
 						finally
@@ -353,11 +390,14 @@ namespace DrillConstructions
 						if (!emptyString)
 						{
 								//TODO: to think of a better way to handle lower/upper cases
-								string createCard = "INSERT INTO " + activeConstructionsStorage +
-										" (Construction, Meaning, Example, Type) " +
-										"VALUES ('" + TxtConstruction.Text.ToLower() + "', '" + TxtMeaning.Text.ToLower() + "', '" + TxtExample.Text + "', '" + ComboBoxType.Text + "')";
 
-								Complex_ExecuteQuery(createCard);
+								string query = @"INSERT INTO " + activeConstructionsStorage +
+								@" (Construction, Meaning, Example, Type) " +
+								@"VALUES (@construction, @meaning, @example, @type)";
+
+								var cardToAdd = new CardModel(TxtConstruction.Text.ToLower(), TxtMeaning.Text.ToLower(), TxtExample.Text, ComboBoxType.Text);
+
+								Complex_ExecuteQuery(query, cardToAdd);
 								LabelAddCardInformation.ForeColor = Color.ForestGreen;
 								LabelAddCardInformation.Text = $"'{TxtConstruction.Text}' card has been added in '{activeConstructionsStorage}'.";
 								ClearAddCardFields();
@@ -459,11 +499,12 @@ namespace DrillConstructions
 						var confirmationPopUp = MessageBox.Show($"Are you sure you want to DELETE '{cardConstruction}' card?", "Think Twice", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
 						if (confirmationPopUp == DialogResult.Yes)
 						{
-								string commandDeleteCard;
 
-								commandDeleteCard = $"DELETE FROM {activeStorage} WHERE ID = {TxtBrowserID.Text}";
+								string query = "DELETE FROM " + activeStorage + " WHERE ID = @id";
 
-								Complex_ExecuteQuery(commandDeleteCard);
+								var cardToDelete = new CardModel(TxtBrowserID.Text);
+
+								Complex_ExecuteQuery(query, cardToDelete);
 
 								SetSearchResultForLabelWhenDisplayingAllCards();
 
@@ -538,14 +579,20 @@ namespace DrillConstructions
 						if (!emptyString)
 						{
 								//TODO: to think of a better way to handle lower/upper cases
-								string updateCard = $"UPDATE {activeConstructionsStorage} " +
-										$"SET Construction = '{TxtBrowserConstruction.Text.ToLower()}', " +
-										$"Meaning = '{TxtBrowserMeaning.Text.ToLower()}', " +
-										$"Example = '{TxtBrowserExample.Text}', " +
-										$"Type = '{ComboBoxBrowserType.Text}' " +
-										$"WHERE ID = '{TxtBrowserID.Text}'";
+								string query = "UPDATE " + activeConstructionsStorage + " " +
+										"SET Construction = @construction, " +
+										"Meaning = @meaning, " +
+										"Example = @example, " +
+										"Type = @type " +
+										"WHERE ID = @id";
 
-								Complex_ExecuteQuery(updateCard);
+								var cardToUpdate = new CardModel(TxtBrowserConstruction.Text.ToLower(), 
+										TxtBrowserMeaning.Text.ToLower(), 
+										TxtBrowserExample.Text, 
+										ComboBoxBrowserType.Text, 
+										TxtBrowserID.Text);
+
+								Complex_ExecuteQuery(query, cardToUpdate);
 
 								string cardID = TxtBrowserID.Text;
 
